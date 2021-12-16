@@ -1,6 +1,5 @@
 # mccontroler
-McControler
-#image
+IMAGE
 ![This is an image](https://github.com/yellow-team-xyz/mccontroler/raw/main/screenshot/1.png)
 ![This is an image](https://github.com/yellow-team-xyz/mccontroler/raw/main/screenshot/2.png)
 ![This is an image](https://github.com/yellow-team-xyz/mccontroler/raw/main/screenshot/3.png)
