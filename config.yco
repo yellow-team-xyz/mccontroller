@@ -1,0 +1,6 @@
+{
+    "webip":"localhost",
+    "multipleips":"false",
+    "serverip":"localhost",
+    "webserverport":"3000"
+}
