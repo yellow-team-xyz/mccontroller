@@ -1,3 +1,4 @@
+![GitHub Light](https://github.com/github-light.png#gh-dark-mode-only)
 # mccontroler
 McControler
 > How to install || 1:npm i 2:node . 3:start
