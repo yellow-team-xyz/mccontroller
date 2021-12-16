@@ -33,7 +33,7 @@ let loadui = 'off';
 
 let webserverport = "";
 let webip = "";
-multipleips = "";
+let multipleips = "";
 
 let serverip = "";
 let publicserverip = "";
