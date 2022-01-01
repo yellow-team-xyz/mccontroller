@@ -14,17 +14,28 @@ const lineReader = require('line-reader');
 const request = require('request');
 const mcping = require("mcping-js");
 const download = require('download');
+const expressip = require('express-ip');
+
+app.use(expressip().getIpInfoMiddleware);
+app.use('/static', express.static('static'));
+app.use('/static/server-icon.png', express.static('./server/server-icon.png'));
+app.use(bodyparser.urlencoded({ extended: true }));
 
 console.log("Please wait while reading the information".yellow);
 
-let dict = 'qwertyuioplkjhgfdsazxcvbnm123456789QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+let dict = 'qwertyuioplkjhgfdsazxcv.bnm12345678.9QWERTYUIOPASDFGHJKLZXCVBNM123%#@%4567890';
+let dict_s = 'ZXCVBNM.LKJHGFDSAQWERTYUIOP@#$%^12345678#90z%.xcvbnmlkjhgfdsaqwertyuiop';
 
+let login_token = '';
+for(var i = 0; i < 128; i++){
+  login_token = login_token + dict_s.charAt(Math.floor(Math.random() * dict_s.length));
+}
 let socketiokey = '';
-for(var i = 0; i < 16; i++){
+for(var i = 0; i < 64; i++){
   socketiokey = socketiokey + dict.charAt(Math.floor(Math.random() * dict.length));
 }
 let sendsocketkey = '';
-for(var i = 0; i < 16; i++){
+for(var i = 0; i < 64; i++){
   sendsocketkey = sendsocketkey + dict.charAt(Math.floor(Math.random() * dict.length));
 }
 
@@ -36,7 +47,18 @@ let webip = "";
 let multipleips = "";
 
 let serverip = "";
-let publicserverip = "";
+
+let dash_head = "";
+let dash_main = "";
+let dash_nav = "";
+let dash_nav_side = "";
+let dash_script = "";
+
+let login_head = "";
+let login_main = "";
+let login_script = "";
+
+let blacklist_ip = ""
 
 fs.readFile('config.yco', 'utf8', function(err, data){
   datajson = JSON.parse(data);
@@ -46,7 +68,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
   multipleips = datajson.multipleips;
 
   console.log("Done!".green);
-  
+
   request.get(`http://api.yellow-team.xyz/news/?event=mccontroller_news`,  (error, resp, body)  => {
     console.log('News: '.green+`${body}`.yellow);
   });
@@ -68,6 +90,12 @@ fs.readFile('config.yco', 'utf8', function(err, data){
           let eula = '';
           
           let serverport = '';
+
+          console.log("Loading Blacklist Ip".red);
+          fs.readFile('data/blacklist_ip.ydb', 'utf8', function(err, data){
+            blacklist_ip = data.split("\n");
+            console.log('Done!'.green);
+          });
           
           setInterval(() => {
             fs.readFile('data/setup.ydb', 'utf8', function(err, setupdata){
@@ -82,10 +110,48 @@ fs.readFile('config.yco', 'utf8', function(err, data){
               eula = setupjson.eula;
               serverport = setupjson.port;
             });
+            fs.readFile('data/blacklist_ip.ydb', 'utf8', function(err, data){
+              blacklist_ip = data.split("\n");
+            });
             
           }, 1000);
           
           setTimeout(() => {
+          
+
+          module.exports.io = (io);
+          module.exports.app = (app);
+          module.exports.fs = (fs);
+          module.exports.url = (url);
+          module.exports.bodyparser = (bodyparser);
+          module.exports.expressip = (expressip);
+          module.exports.webserverport = (webserverport);
+          module.exports.webip = (webip);
+          module.exports.multipleips = (multipleips);
+          module.exports.serverip = (serverip);
+
+          setInterval(() => {
+            module.exports.serverstatus = (serverstatus);
+            module.exports.loadui = (loadui);
+            module.exports.sendsocketkey = (sendsocketkey);
+            module.exports.socketiokey = (socketiokey);
+            module.exports.blacklist_ip = (blacklist_ip);
+            module.exports.username = (username);
+            module.exports.password = (password);
+            module.exports.login_token = (login_token);
+            module.exports.setup = (setup);
+            module.exports.min_ram = (min_ram);
+            module.exports.max_ram = (max_ram);
+            module.exports.version = (version);
+            module.exports.servername = (servername);
+            module.exports.software = (software);
+            module.exports.eula = (eula);
+            module.exports.serverport = (serverport);
+            if(serverstatus=='on'){
+              module.exports.minecraft = (minecraft);
+            }
+          }, );
+          
           
           console.log("Done!".green);
           if(setup==1){
@@ -110,15 +176,24 @@ fs.readFile('config.yco', 'utf8', function(err, data){
           function minecraft_server() {
             fs.writeFile('server/eula.txt', "eula=true", 'utf-8', function(err, data) {
               console.log('Accept Minecraft EULA!'.yellow);
-            })
-            minecraft = spawn(
-              "java",
-              [`-Xms${min_ram}G`, `-Xmx${max_ram}G`, '-jar', `./software/${software}/server_${version}.jar`, 'nogui'],
-              {cwd:"./server"}
-            );
-            console.log('Server Start By Web'.green);
-            serverstatus='on';
-            return minecraft;
+            });
+            console.log("Checking Server.Properties".yellow);
+            fs.readFile('server/server.properties', 'utf8', function(err, data){
+              server_split_conf = data.split("\r\n",);
+              let save_server_conf = `${server_split_conf[0]}\r\n${server_split_conf[1]}\r\n${server_split_conf[2]}\r\n${server_split_conf[3]}\r\n${server_split_conf[4]}\r\n${server_split_conf[5]}\r\n${server_split_conf[6]}\r\n${server_split_conf[7]}\r\n${server_split_conf[8]}\r\n${server_split_conf[9]}\r\n${server_split_conf[10]}\r\n${server_split_conf[11]}\r\n${server_split_conf[12]}\r\n${server_split_conf[13]}\r\n${server_split_conf[14]}\r\n${server_split_conf[15]}\r\n${server_split_conf[16]}\r\n${server_split_conf[17]}\r\n${server_split_conf[18]}\r\n${server_split_conf[19]}\r\n${server_split_conf[20]}\r\n${server_split_conf[21]}\r\n${server_split_conf[22]}\r\n${server_split_conf[23]}\r\n${server_split_conf[24]}\r\n${server_split_conf[25]}\r\n${server_split_conf[26]}\r\n${server_split_conf[27]}\r\n${server_split_conf[28]}\r\n${server_split_conf[29]}\r\n${server_split_conf[30]}\r\n${server_split_conf[31]}\r\nserver-port=${serverport}\r\n${server_split_conf[33]}\r\n${server_split_conf[34]}\r\n${server_split_conf[35]}\r\n${server_split_conf[36]}\r\n${server_split_conf[37]}\r\n${server_split_conf[38]}\r\n${server_split_conf[39]}\r\n${server_split_conf[40]}\r\n${server_split_conf[41]}\r\n${server_split_conf[42]}\r\n${server_split_conf[43]}\r\n${server_split_conf[44]}\r\n${server_split_conf[45]}\r\n${server_split_conf[46]}\r\n${server_split_conf[47]}\r\n${server_split_conf[48]}\r\n${server_split_conf[49]}\r\n${server_split_conf[50]}\r\n${server_split_conf[51]}\r\n${server_split_conf[52]}`;
+              fs.writeFile('server/server.properties', save_server_conf, 'utf-8', function(err, data) {
+                console.log("Done!".green);
+                minecraft = spawn(
+                  "java",
+                  [`-Xms${min_ram}G`, `-Xmx${max_ram}G`, '-jar', `./software/${software}/server_${version}.jar`, 'nogui'],
+                  {cwd:"./server"}
+                );
+                console.log('Server Start By Web'.green);
+                serverstatus='on';
+                return minecraft;
+              });
+            });
+            
           } 
           
           io.on('connection', function (socket) {
@@ -156,13 +231,32 @@ fs.readFile('config.yco', 'utf8', function(err, data){
             
           });
           
-          app.use('/static', express.static('static'));
-          app.use('/static/server-icon.png', express.static('./server/server-icon.png'));
-          
-          app.use(bodyparser.urlencoded({ extended: true }));
-          
           app.get('/', function(req, res){
-            
+
+              if(blacklist_ip.includes(`${req.ipInfo.ip}`)==true){
+                res.send(`
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Error 403</title>
+	<link rel="icon" href="/static/img/logo.png">
+	<link href="/static/css/error.css" rel="stylesheet">
+</head>
+<body>
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>403</h1>
+			</div>
+			<h2>Access denied ${req.ipInfo.ip}</h2>
+			<p>Your IP is blocked!</p>
+		</div>
+	</div>
+
+</body>
+</html>
+                `);
+              }else{
               const params = url.parse(req.url,true).query;
           
               let errorcode = params.errorcode;
@@ -270,6 +364,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                         </label>
                         <select name="new_software" class="form-select mb-3">
                           <option value="paper">Paper</option>
+                          <option value="spigot">Spigot</option>
                         </select>
                         </div>
                         <div class="form-select mb-3">
@@ -334,6 +429,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                       background-color: #ffbf00;
                     }
                   </style>
+                  ${login_head}
               </head>
               <body class="bg-dark">
               
@@ -363,6 +459,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                         <div class="d-grid">
                           <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Login</button>
                         </div>
+                        ${login_main}
                         <hr class="my-4">
                         </form>
                         <div class="d-grid mb-2">
@@ -373,15 +470,73 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 </div>
               </div>
               </div>
+              <script>
+              ${login_script}
+              </script>
               </body>
           </html>
               `);
                 }
               }
-              
+              }
           });
-          
+          app.get('/dashboard/', function(req, res){
+            if(blacklist_ip.includes(`${req.ipInfo.ip}`)==true){
+              res.send(`
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error 403</title>
+<link rel="icon" href="/static/img/logo.png">
+<link href="/static/css/error.css" rel="stylesheet">
+</head>
+<body>
+<div id="notfound">
+  <div class="notfound">
+    <div class="notfound-404">
+      <h1>403</h1>
+    </div>
+    <h2>Access denied ${req.ipInfo.ip}</h2>
+    <p>Your IP is blocked!</p>
+  </div>
+</div>
+
+</body>
+</html>
+              `);
+            }else{
+          res.send(`
+          <script>
+          window.location.replace("/?errorcode=101");
+          </script>
+          `);
+            }
+          });
           app.post('/dashboard/', function(req, res){
+            if(blacklist_ip.includes(`${req.ipInfo.ip}`)==true){
+              res.send(`
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error 403</title>
+<link rel="icon" href="/static/img/logo.png">
+<link href="/static/css/error.css" rel="stylesheet">
+</head>
+<body>
+<div id="notfound">
+  <div class="notfound">
+    <div class="notfound-404">
+      <h1>403</h1>
+    </div>
+    <h2>Access denied ${req.ipInfo.ip}</h2>
+    <p>Your IP is blocked!</p>
+  </div>
+</div>
+
+</body>
+</html>
+              `);
+            }else{
             if(serverstatus=='on'){
               minecraft.on('exit', (code, signal) => {
                 if (signal) console.log(`Process killed with signal: ${signal}`);
@@ -408,11 +563,16 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 if(sendsocket==sendsocketkey){
                   if(event=='startserver'){
                     minecraft_server();
-                    minecraft.stdout.on('data', function (data) {
-                    if (data) {
-                      io.emit(`${socketiokey}_console_log`,`${data}`); 
-                    }
-                    });
+                    setTimeout(() => {
+                      if(serverstatus=='on'){
+                        minecraft.stdout.on('data', function (data) {
+                          if (data) {
+                            io.emit(`${socketiokey}_console_log`,`${data}`); 
+                          }
+                        });
+                      }
+                    }, 1500);
+                    
                   }
                 }
               }
@@ -553,7 +713,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
           
               if(loadui=="on"){
                 res.send(`
-                <html>
+<html>
 <head>
 <title>McController - Please wait</title>
 <link rel="icon" href="/static/img/logo.png">
@@ -578,7 +738,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
 </html>
                 `);
               }
-              if(setup==1&&req.body.username==username&&req.body.password==password&&loadui=="off"){
+              if(setup==1&&req.body.username==username&&req.body.password==password&&loadui=="off"||setup==1&&loadui=="off"&&req.body.token_login==login_token){
                 res.send(`
           <html>
             <head>
@@ -593,6 +753,9 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 <script src="/static/js/jquery-3.6.0.js"></script>
                 <script src="/static/js/socket.io.js"></script>
                 <script src="/static/js/chart.js"></script>
+
+                ${dash_head}
+
                 <style>
                 .btn-yellow-team {
                   color: white !important;
@@ -635,7 +798,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 }
                 </style>
             </head>
-            <body style="background-color: #101010;">
+            <body id="body" style="background-color: #101010;">
               
                 <nav style="background-color: #161616;" class="navbar navbar-expand-md fixed-top">
                 <div class="container-fluid">
@@ -643,8 +806,9 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                   
                   <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                      
+                    ${dash_nav}
                     </ul>
+                    
                     <form action="/dashboard/" method="post" class="d-flex">
                       <button name="logout" value="logout" class="btn btn-danger" type="submit"><i class="fas fa-sign-out-alt"></i> Logout</button>
                     </form>
@@ -659,6 +823,8 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                   <a style="color:White;" type="button" onclick='log_m();'><i class="fas fa-file-alt"></i> Log</a>
                   <a style="color:White;" type="button" onclick='setup_m();'><i class="fa fa-briefcase"></i> Setup</a>
                   <a style="color:White;" type="button" onclick='profile_m();'><i class="fa fa-address-card"></i> Profile</a>
+                  <a style="color:White;" type="button" onclick='addon_m();'><i class="fa fa-cubes"></i> Addons</a>
+                  ${dash_nav_side}
                 </div>
               
                 <div id="server" class="main">
@@ -762,7 +928,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 </div>
                 </div>
                 </div>
-                
+
                 <div id="setup" class="main">
                 <div class="col pb-0 mt-0"><div class="card bg-dark">
                 <div style="color:White;" class="card-header"><i class="fa fa-briefcase"></i> Setup</div>
@@ -798,6 +964,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
               </label>
               <select id="new_software" class="form-select mb-3">
                 <option value="paper">Paper</option>
+                <option value="spigot">Spigot</option>
               </select>
               </div>
               <div class="form-select mb-3">
@@ -826,6 +993,10 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 </div>
                 </div>
                 </div>
+                <div id="addons" class="main">
+                ${dash_main}
+                </div>
+
                 <div id="profile" class="main">
                 <div class="col pb-0 mt-0"><div class="card bg-dark">
                 <div style="color:White;" class="card-header"><i class="fa fa-address-card"></i> Profile</div>
@@ -862,6 +1033,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 </div>
                 </div>
                 <script>
+                
                 const socket = io('http://${webip}:${webserverport}/');
                 const xhttp = new XMLHttpRequest();
 
@@ -886,6 +1058,8 @@ fs.readFile('config.yco', 'utf8', function(err, data){
            
                 let serverstatus = '${serverstatus}';
           
+                localStorage.setItem("token", "${login_token}");
+
                 function start_server() {
                   if(serverstatus == 'off'){
                   xhttp.open("POST", "/dashboard/", true);
@@ -1116,6 +1290,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#server").show();
                 $("#options").hide();
                 $("#console").hide();
+                $("#addons").hide();
                 $("#log").hide();
                 $("#setup").hide();
                 $("#profile").hide();
@@ -1130,6 +1305,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#setup").hide();
                 $("#options").hide();
                 $("#profile").hide();
+                $("#addons").hide();
                 }
                 function options_m() {
                 $("#server").hide();
@@ -1138,6 +1314,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#setup").hide();
                 $("#options").show();
                 $("#profile").hide();
+                $("#addons").hide();
                 }
                 function console_m() {
                 $("#server").hide();
@@ -1146,6 +1323,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#options").hide();
                 $("#setup").hide();
                 $("#profile").hide();
+                $("#addons").hide();
                 }
                 function log_m() {
                 $("#server").hide();
@@ -1154,6 +1332,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#setup").hide();
                 $("#options").hide();
                 $("#profile").hide();
+                $("#addons").hide();
                 }
                 function setup_m() {
                 $("#server").hide();
@@ -1162,6 +1341,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#setup").show();
                 $("#options").hide();
                 $("#profile").hide();
+                $("#addons").hide();
                 }
                 function profile_m() {
                 $("#server").hide();
@@ -1170,7 +1350,20 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                 $("#options").hide();
                 $("#setup").hide();
                 $("#profile").show();
+                $("#addons").hide();
                 }
+                function addon_m() {
+                  $("#server").hide();
+                  $("#console").hide();
+                  $("#log").hide();
+                  $("#options").hide();
+                  $("#setup").hide();
+                  $("#profile").hide();
+                  $("#addons").show();
+                }
+
+                ${dash_script}
+
 
                 </script>
             </body>
@@ -1182,6 +1375,7 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                     res.send(`
                   <script>
                   window.location.replace("/?errorcode=103");
+                  localStorage.setItem("token", "logout");
                   </script>`);
                   }else{
                     res.send(`
@@ -1192,54 +1386,94 @@ fs.readFile('config.yco', 'utf8', function(err, data){
                   
                 }  
               }
+            }
           });
           if(multipleips="false"){
             server.listen(webserverport, () => {
-              if(setup=1){
-                console.log("--------------------------------------------".yellow);
-                console.log("Mc Controler Yellow Team ©".green);
-                console.log("Server listening!".green);
-                console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
-                console.log(`User:admin Password:You can see in Database`.green)
-                console.log("--------------------------------------------".yellow);
-              }else{
-                if(setup=0){
-                  console.log("--------------------------------------------".yellow);
-                  console.log("Mc Controler Yellow Team ©".green);
-                  console.log("Server listening!".green);
-                  console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
-                  console.log(`User:admin Password:Please Do The Setup`.green)
-                  console.log("--------------------------------------------".yellow);
-                }
-              }
-                
+              console.log("--------------------------------------------".yellow);
+              console.log("Mc Controler Yellow Team ©".green);
+              console.log("Server listening!".green);
+              console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
+              console.log(`User:admin`.green)
+              console.log("--------------------------------------------".yellow);
+
+              fs.readdir("./plugins/", (err, files) => {
+                files.forEach(file => {
+                  const eventHandler = require(`./plugins/${file}`);
+                  const pluginname = file.split(".")[0];
+                  console.log("Loading Plugins: [".yellow+pluginname.green+"]".yellow);
+                  if(eventHandler.login_head==undefined){}else{
+                    login_head = `${login_head}`+eventHandler.login_head;
+                  }
+                  if(eventHandler.login_main==undefined){}else{
+                    login_main = `${login_main}`+eventHandler.login_main;
+                  }
+                  if(eventHandler.login_script==undefined){}else{
+                    login_script = `${login_script}`+eventHandler.login_script;
+                  }
+                  if(eventHandler.dash_head==undefined){}else{
+                    dash_head = `${dash_head}`+eventHandler.dash_head;
+                  }
+                  if(eventHandler.dash_main==undefined){}else{
+                    dash_main = `${dash_main}`+eventHandler.dash_main;
+                  }
+                  if(eventHandler.dash_nav==undefined){}else{
+                    dash_nav = `${dash_nav}`+eventHandler.dash_nav;
+                  }
+                  if(eventHandler.dash_nav_side==undefined){}else{
+                    dash_nav_side = `${dash_nav_side}`+eventHandler.dash_nav_side;
+                  }
+                  if(eventHandler.dash_script==undefined){}else{
+                    dash_script = `${dash_script}`+eventHandler.dash_script;
+                  }
+                });
+              });
             });
           }else{
             if(multipleips="true"){
               server.listen(webserverport,webip, () => {
-                if(setup=1){
-                  console.log("--------------------------------------------".yellow);
-                  console.log("Mc Controler Yellow Team ©".green);
-                  console.log("Server listening!".green);
-                  console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
-                  console.log(`User:admin Password:You can see in Database`.green)
-                  console.log("--------------------------------------------".yellow);
-                }else{
-                  if(setup=0){
-                    console.log("--------------------------------------------".yellow);
-                    console.log("Mc Controler Yellow Team ©".green);
-                    console.log("Server listening!".green);
-                    console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
-                    console.log(`User:admin Password:Please Do The Setup`.green)
-                    console.log("--------------------------------------------".yellow);
-                  }
-                }
-                  
+                console.log("--------------------------------------------".yellow);
+                console.log("Mc Controler Yellow Team ©".green);
+                console.log("Server listening!".green);
+                console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
+                console.log(`User:admin`.green)
+                console.log("--------------------------------------------".yellow);
+                
+                fs.readdir("./plugins/", (err, files) => {
+                  files.forEach(file => {
+                    const eventHandler = require(`./plugins/${file}`);
+                    const pluginname = file.split(".")[0];
+                    console.log("Loading Plugins: [".yellow+pluginname.green+"]".yellow);
+                    if(eventHandler.login_head==undefined){}else{
+                      login_head = `${login_head}`+eventHandler.login_head;
+                    }
+                    if(eventHandler.login_main==undefined){}else{
+                      login_main = `${login_main}`+eventHandler.login_main;
+                    }
+                    if(eventHandler.login_script==undefined){}else{
+                      login_script = `${login_script}`+eventHandler.login_script;
+                    }
+                    if(eventHandler.dash_head==undefined){}else{
+                      dash_head = `${dash_head}`+eventHandler.dash_head;
+                    }
+                    if(eventHandler.dash_main==undefined){}else{
+                      dash_main = `${dash_main}`+eventHandler.dash_main;
+                    }
+                    if(eventHandler.dash_nav==undefined){}else{
+                      dash_nav = `${dash_nav}`+eventHandler.dash_nav;
+                    }
+                    if(eventHandler.dash_nav_side==undefined){}else{
+                      dash_nav_side = `${dash_nav_side}`+eventHandler.dash_nav_side;
+                    }
+                    if(eventHandler.dash_script==undefined){}else{
+                      dash_script = `${dash_script}`+eventHandler.dash_script;
+                    }
+                  });
+                });
               });
             }
           }
           
         }, 2000);
       }, 500);
-  
 });
