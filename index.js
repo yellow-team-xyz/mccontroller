@@ -607,75 +607,6 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
                   serverstatus = 'off';
                 });
               }
-              const sendsocket = req.body.sendsocketkey;
-              const event = req.body.event;
-              const cmd_send = req.body.cmd_send;
-              if (sendsocket == sendsocketkey) {
-                if (event == 'update_log') {
-                  lineReader.eachLine('server/logs/latest.log', 'utf8', function (log, last) {
-                    io.emit(`${socketiokey}_log`, `${log}`);
-                  });
-                }
-              }
-              if (sendsocket == sendsocketkey) {
-                if (event == 'update_server_conf') {
-                  let motd = req.body.motd;
-                  let commandblocks = req.body.server_commandblocks;
-                  let whitelist = req.body.server_whitelist;
-                  let cracked = req.body.server_cracked;
-                  let pvp = req.body.server_pvp;
-                  let fly = req.body.server_fly;
-                  let animals = req.body.server_animals;
-                  let monster = req.body.server_monster;
-                  let villagers = req.body.server_villagers;
-                  let nether = req.body.server_nether;
-                  let force_gamemode = req.body.server_force_gamemode;
-                  let spawn_protection = req.body.server_spawn_protection;
-                  let slots = req.body.server_slots;
-                  let gamemode = req.body.server_gamemode;
-                  let difficulty = req.body.server_difficulty;
-                  let resource_pack_url = req.body.server_resource_pack_url;
-                  let server_conf_update = `{"motd":"${motd}","commandblocks":"${commandblocks}","whitelist":"${whitelist}","cracked":"${cracked}","pvp":"${pvp}","fly":"${fly}","animals":"${animals}","monster":"${monster}","villagers":"${villagers}","nether":"${nether}","force_gamemode":"${force_gamemode}","spawn_protection":"${spawn_protection}","slots":"${slots}","gamemode":"${gamemode}","difficulty":"${difficulty}","resource_pack_url":"${resource_pack_url}"}`;
-                  fs.writeFile('data/server_conf.ydb', server_conf_update, 'utf-8', function (err, data) {
-                    server_conf_motd = motd;
-                    io.emit(`${socketiokey}_updateoptions_error`, "101");
-                    console.log("Server_Conf Update".yellow + "[" + "Done".green + "]");
-                  });
-                }
-              }
-              if (serverstatus == 'off') {
-                if (sendsocket == sendsocketkey) {
-                  if (event == 'startserver') {
-                    minecraft_server();
-                    setTimeout(() => {
-                      if (serverstatus == 'on') {
-                        minecraft.stdout.on('data', function (data) {
-                          if (data) {
-                            io.emit(`${socketiokey}_console_log`, `${data}`);
-                          }
-                        });
-                      }
-                    }, 1500);
-                  }
-                }
-              }
-              if (serverstatus == 'on') {
-                if (sendsocket == sendsocketkey) {
-                  if (event == 'stopserver') {
-                    minecraft.stdin.write('stop' + "\r");
-                  }
-                  if (event == 'killserver') {
-                    minecraft.kill('SIGINT');
-                  }
-                  if (event == 'cmd_console') {
-                    if (cmd_send == "stop") {
-                      io.emit(`${socketiokey}_console_log`, `You do not have permission to use this command here ❌`);
-                    } else {
-                      minecraft.stdin.write(cmd_send + "\r");
-                    }
-                  }
-                }
-              }
               if (setup == 0) {
                 const newpassword = req.body.newpassword;
                 const new_min_ram = req.body.new_min_ram;
@@ -720,7 +651,69 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
                     })
                   }
                 }
-              } else {
+              }
+              const sendsocket = req.body.sendsocketkey;
+              const event = req.body.event;
+              const cmd_send = req.body.cmd_send;
+              if (sendsocket == sendsocketkey) {
+                if (event == 'update_log') {
+                  lineReader.eachLine('server/logs/latest.log', 'utf8', function (log, last) {
+                    io.emit(`${socketiokey}_log`, `${log}`);
+                  });
+                }
+                if (event == 'update_server_conf') {
+                  let motd = req.body.motd;
+                  let commandblocks = req.body.server_commandblocks;
+                  let whitelist = req.body.server_whitelist;
+                  let cracked = req.body.server_cracked;
+                  let pvp = req.body.server_pvp;
+                  let fly = req.body.server_fly;
+                  let animals = req.body.server_animals;
+                  let monster = req.body.server_monster;
+                  let villagers = req.body.server_villagers;
+                  let nether = req.body.server_nether;
+                  let force_gamemode = req.body.server_force_gamemode;
+                  let spawn_protection = req.body.server_spawn_protection;
+                  let slots = req.body.server_slots;
+                  let gamemode = req.body.server_gamemode;
+                  let difficulty = req.body.server_difficulty;
+                  let resource_pack_url = req.body.server_resource_pack_url;
+                  let server_conf_update = `{"motd":"${motd}","commandblocks":"${commandblocks}","whitelist":"${whitelist}","cracked":"${cracked}","pvp":"${pvp}","fly":"${fly}","animals":"${animals}","monster":"${monster}","villagers":"${villagers}","nether":"${nether}","force_gamemode":"${force_gamemode}","spawn_protection":"${spawn_protection}","slots":"${slots}","gamemode":"${gamemode}","difficulty":"${difficulty}","resource_pack_url":"${resource_pack_url}"}`;
+                  fs.writeFile('data/server_conf.ydb', server_conf_update, 'utf-8', function (err, data) {
+                    server_conf_motd = motd;
+                    io.emit(`${socketiokey}_updateoptions_error`, "101");
+                    console.log("Server_Conf Update".yellow + "[" + "Done".green + "]");
+                  });
+                }
+                if (serverstatus == 'off') {
+                  if (event == 'startserver') {
+                    minecraft_server();
+                    setTimeout(() => {
+                      if (serverstatus == 'on') {
+                        minecraft.stdout.on('data', function (data) {
+                          if (data) {
+                            io.emit(`${socketiokey}_console_log`, `${data}`);
+                          }
+                        });
+                      }
+                    }, 1500);
+                  }
+                }
+                if (serverstatus == 'on') {
+                  if (event == 'stopserver') {
+                    minecraft.stdin.write('stop' + "\r");
+                  }
+                  if (event == 'killserver') {
+                    minecraft.kill('SIGINT');
+                  }
+                  if (event == 'cmd_console') {
+                    if (cmd_send == "stop") {
+                      io.emit(`${socketiokey}_console_log`, `You do not have permission to use this command here ❌`);
+                    } else {
+                      minecraft.stdin.write(cmd_send + "\r");
+                    }
+                  }
+                }
                 if (setup == 1) {
                   const chnewpassword = req.body.chnewpassword;
                   const chlastpassword = req.body.chlastpassword;
@@ -743,7 +736,7 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
                         software = new_software_v;
                         serverport = new_port_v;
                         io.emit(`${socketiokey}_setup_v_error`, `101`);
-                        console.log('(' + `1`.red + ')' + ' Data Base Update! [Setup]'.green);
+                        console.log(' Data Base Update! [Setup]'.green);
                         if (fs.existsSync(`./server/software/${new_software_v}/server_${new_version_v}.jar`)) {
                           console.log("Done!".green);
                         } else {
@@ -764,17 +757,15 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
                       io.emit(`${socketiokey}_setup_v_error`, `102`);
                     }
                   }
-                  if (sendsocket == sendsocketkey) {
-                    if (chlastpassword == password) {
-                      const ch_pass = `{"admin_password":"${chnewpassword}","setup":"1","min_ram":"${min_ram}","max_ram":"${max_ram}","version":"${version}","server_name":"${servername}","software":"${software}","eula":"${eula}","port":"${serverport}"}`;
-                      fs.writeFile('data/setup.ydb', ch_pass, 'utf-8', function (err, data) {
-                        password = chnewpassword;
-                        io.emit(`${socketiokey}_profile_error`, "102");
-                        console.log('(' + `1`.red + ')' + ' Data Base Update! [Profile]'.green);
-                      });
-                    } else {
-                      io.emit(`${socketiokey}_profile_error`, "101");
-                    }
+                  if (chlastpassword == password) {
+                    const ch_pass = `{"admin_password":"${chnewpassword}","setup":"1","min_ram":"${min_ram}","max_ram":"${max_ram}","version":"${version}","server_name":"${servername}","software":"${software}","eula":"${eula}","port":"${serverport}"}`;
+                    fs.writeFile('data/setup.ydb', ch_pass, 'utf-8', function (err, data) {
+                      password = chnewpassword;
+                      io.emit(`${socketiokey}_profile_error`, "102");
+                      console.log('Data Base Update! [Profile]'.green);
+                    });
+                  } else {
+                    io.emit(`${socketiokey}_profile_error`, "101");
                   }
                 }
               }
@@ -804,531 +795,692 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
               }
               if (setup == 1 && req.body.username == username && req.body.password == password && loadui == "off" || setup == 1 && loadui == "off" && req.body.token_login == login_token) {
                 res.send(`<html>
-              <head>
-                  <title>McController - Dashboard</title>
-                  <link rel="icon" href="../static/img/logo.png">
-                  <link rel="preconnect" href="//fdn.fontcdn.ir">
-                  <link rel="preconnect" href="//v1.fontapi.ir">
-                  <link href="https://v1.fontapi.ir/css/Estedad" rel="stylesheet">
-                  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-                  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-                  <script src="../static/js/bootstrap.bundle.min.js"></script>
-                  <script src="../static/js/jquery-3.6.0.js"></script>
-                  <script src="../static/js/socket.io.js"></script>
-                  <script src="../static/js/chart.js"></script>
-                  ${dash_head}
-                  <style>
-                  .btn-yellow-team {
-                    color: white !important;
-                    background-color: #ffbf00;
-                  }
-                  .sidenav {
-                    height: 100%;
-                    width: 200px;
-                    position: fixed;
-                    z-index: 1;
-                    top: 0;
-                    left: 0;
-                    background-color: #161616;
-                    overflow-x: hidden;
-                    padding-top: 20px;
-                  }
-                  .sidenav a {
-                    padding: 6px 6px 6px 32px;
-                    text-decoration: none;
-                    font-size: 25px;
-                    color: #818181;
-                    display: block;
-                  }
-                  .sidenav a:hover {
-                    color: #f1f1f1;
-                  }
-                  .main {
-                    margin-left: 215px;
-                    margin-top: 100px;
-                    margin-right: 15px;
-                    margin-bottom: 15px;
-                  }
-                  @media screen and (max-height: 450px) {
-                    .sidenav {padding-top: 15px;}
-                    .sidenav a {font-size: 18px;}
-                  }
-                  </style>
-              </head>
-              <body id="body" style="background-color: #101010;">
-                  <nav style="background-color: #161616;" class="navbar navbar-expand-md fixed-top">
-                  <div class="container-fluid">
-                  <h1 style="color:White;"><img src="/static/img/logo.png" alt="" width="40" height="40" class="d-inline-block align-text-top"> McController</h1>     
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                      <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                      ${dash_nav}
-                      </ul>
-                      <form action="/dashboard/" method="post" class="d-flex">
-                        <button name="logout" value="logout" class="btn btn-danger" type="submit"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                      </form>
+<head>
+    <title>McController - Dashboard</title>
+    <link rel="icon" href="../static/img/logo.png">
+    <link rel="preconnect" href="//fdn.fontcdn.ir">
+    <link rel="preconnect" href="//v1.fontapi.ir">
+    <link href="https://v1.fontapi.ir/css/Estedad" rel="stylesheet">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/jquery-3.6.0.js"></script>
+    <script src="../static/js/socket.io.js"></script>
+    <script src="../static/js/chart.js"></script>
+    ${dash_head}
+    <style>
+        .btn-yellow-team {
+            color: white !important;
+            background-color: #ffbf00;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #161616;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .sidenav a {
+            padding: 6px 6px 6px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .main {
+            margin-left: 215px;
+            margin-top: 100px;
+            margin-right: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+
+        ::selection {
+            background: #1a9b00;
+        }
+
+        .input-line {
+            display: -webkit-box;
+            -webkit-box-orient: horizontal;
+            -webkit-box-align: stretch;
+            display: -moz-box;
+            -moz-box-orient: horizontal;
+            -moz-box-align: stretch;
+            display: box;
+            box-orient: horizontal;
+            box-align: stretch;
+            clear: both;
+        }
+
+        .input-line>div:nth-child(2) {
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            box-flex: 1;
+        }
+
+        .prompt {
+            white-space: nowrap;
+            color: #96b38a;
+            margin-right: 7px;
+            display: -webkit-box;
+            -webkit-box-pack: center;
+            -webkit-box-orient: vertical;
+            display: -moz-box;
+            -moz-box-pack: center;
+            -moz-box-orient: vertical;
+            display: box;
+            box-pack: center;
+            box-orient: vertical;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        .cmdline {
+            outline: none;
+            background-color: transparent;
+            margin: 0;
+            width: 50%;
+            font: inherit;
+            border: none;
+            color: inherit;
+        }
+
+        .ls-files {
+            height: 45px;
+            -webkit-column-width: 100px;
+            -moz-column-width: 100px;
+            -o-column-width: 100px;
+            column-width: 100px;
+        }
+
+        .clock-container {
+            display: none;
+            position: relative;
+            width: 200px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+
+        .clock-container>svg>circle {
+            stroke-width: 2px;
+            stroke: #fff;
+        }
+
+        .hour,
+        .min,
+        .sec {
+            stroke-width: 1px;
+            fill: #333;
+            stroke: #555;
+        }
+
+        .sec {
+            stroke: #f55;
+        }
+    </style>
+</head>
+
+<body id="body" style="background-color: #101010;">
+    <nav style="background-color: #161616;" class="navbar navbar-expand-md fixed-top">
+        <div class="container-fluid">
+            <h1 style="color:White;"><img src="/static/img/logo.png" alt="" width="40" height="40"
+                    class="d-inline-block align-text-top"> McController</h1>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    ${dash_nav}
+                </ul>
+                <form action="/dashboard/" method="post" class="d-flex">
+                    <button name="logout" value="logout" class="btn btn-danger" type="submit"><i
+                            class="fas fa-sign-out-alt"></i> Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="sidenav">
+        <a href="#">Noon</a>
+        <a style="color:White;" type="button" onclick='server_m();'><i class="fa fa-power-off"></i> Server</a>
+        <a style="color:White;" type="button" onclick='options_m();'><i class="fa fa-cog"></i> Options</a>
+        <a style="color:White;" type="button" onclick='console_m();'><i class="fa fa-terminal"></i> Console</a>
+        <a style="color:White;" type="button" onclick='log_m();'><i class="fas fa-file-alt"></i> Log</a>
+        <a style="color:White;" type="button" onclick='setup_m();'><i class="fa fa-briefcase"></i> Setup</a>
+        <a style="color:White;" type="button" onclick='profile_m();'><i class="fa fa-address-card"></i> Profile</a>
+        <a style="color:White;" type="button" onclick='addon_m();'><i class="fa fa-cubes"></i> Addons</a>
+        ${dash_nav_side}
+    </div>
+    <div id="server" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-header">
+                    <center><i class="fa fa-server"></i> Server</center>
+                </div>
+                <div style="color:White;" class="card-body">
+                    <center>
+                        <h3>${serverip}:${serverport}</h3>
+                    </center>
+                    <center>
+                        <h3>${servername}</h3>
+                    </center>
+                    <div id='offline' style="background-color: #C70039; color:White;" class="card-footer">
+                        <center>
+                            <h4><i class="fas fa-stop-circle"></i> Offline</h4>
+                        </center>
                     </div>
-                  </div>
-                </nav>
-                  <div class="sidenav">
-                    <a href="#">Noon</a>
-                    <a style="color:White;" type="button" onclick='server_m();'><i class="fa fa-power-off"></i> Server</a>
-                    <a style="color:White;" type="button" onclick='options_m();'><i class="fa fa-cog"></i> Options</a>
-                    <a style="color:White;" type="button" onclick='console_m();'><i class="fa fa-terminal"></i> Console</a>
-                    <a style="color:White;" type="button" onclick='log_m();'><i class="fas fa-file-alt"></i> Log</a>
-                    <a style="color:White;" type="button" onclick='setup_m();'><i class="fa fa-briefcase"></i> Setup</a>
-                    <a style="color:White;" type="button" onclick='profile_m();'><i class="fa fa-address-card"></i> Profile</a>
-                    <a style="color:White;" type="button" onclick='addon_m();'><i class="fa fa-cubes"></i> Addons</a>
-                    ${dash_nav_side}
-                  </div>
-                  <div id="server" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><center><i class="fa fa-server"></i> Server</center></div>
-                  <div style="color:White;" class="card-body">
-                  <center><h3>${serverip}:${serverport}</h3></center>
-                  <center><h3>${servername}</h3></center>
-                  <div id='offline' style="background-color: #C70039; color:White;" class="card-footer">
-                  <center><h4><i class="fas fa-stop-circle"></i> Offline</h4></center>
-                  </div>
-                  <div id='online' style="background-color: #525252; color:White;" class="card-footer">
-                  <center><h4 id='online_txt'><i class="fas fa-stop-circle"></i> Starting ...</h4></center>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <h1> </h1>
-                  <div id="server_start">
-                  <center><button onclick='start_server();' type="button" class="btn btn-lg btn-success"><i class="fa fa-power-off"></i> Start</button></center>
-                  </div>
-                  <center><div id="server_stop_kill"><button onclick='stop_server();' type="button" class="btn btn-lg btn-danger"><i class="fas fa-stop-circle"></i> Stop</button> <button onclick='kill_server();' type="button" class="btn btn-lg btn-danger"><i class="	fa fa-exclamation-triangle"></i> Kill</button></div></center>
-                  <div class="row row-cols-1 row-cols-lg-2">
-                  <div class="col pb-2 mt-3"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fas fa-memory"></i> Ram Use</div>
-                  <div class="card-body">
-                  <canvas id="Ramchart" style="width: 100%; height: 100%"></canvas>
-                  </div>
-                  </div>
-                  </div>
-                  <div class="col pb-2 mt-3"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fa fa-microchip"></i> CPU Use</div>
-                  <div class="card-body">
-                  <canvas id="Cpuchart" style="width: 100%; height: 100%"></canvas>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div id="options" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-body">
-                  <div id="diverr_uo_101" class="alert alert-success" role="alert">
-                  <center>Successfully!</center>
-                  </div>
-                  <div id="diverr_uo_102" class="alert alert-danger" role="alert">
-                  <center>Error!</center>
-                  </div>
-                  <div class="d-flex justify-content-start">
-                  <img src="/static/server-icon.png" class="rounded float-right" alt="64">
-                  <div style="margin-left: 15px;">
-                  <h4>${serverip}:${serverport}</h4>
-                  <input id="server_motd" placeholder="Server Motd"  type="text" class="form-control" value="${server_conf_motd}" aria-describedby="inputGroup-sizing-sm">
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div class="col pb-0 mt-0"><div style="margin-top: 35px;" class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fa fa-cog"></i>  Server.properties</div>
-                  <div style="color:White;" class="card-body">
-                  <div class="d-flex justify-content-between">
-                  <div class="form-input">
-                  <label class="form-check-label" for="server_spawn_protection">
-                  Spawn Protection
-                  </label>
-                  <input class="form-control" id="server_spawn_protection" type="number" step="1" min="1" max="30000000" value="${server_conf_spawn_protection}" />
-                  </div>
-                  <div class="form-input mb-3">
-                  <label class="form-check-label" for="server_slots">
-                    Slots
-                  </label>
-                  <input class="form-control" id="server_slots" type="number" step="1" min="1" max="2147483647" value="${server_conf_slots}" />
-                  </div>
-                  <div class="form-input">
-                  <label class="form-check-label" for="server_gamemode">
-                    Gamemode
-                  </label>
-                  <select id="server_gamemode" class="form-select mb-3">
-                    <option value="0">Survival</option>
-                    <option value="1">Creative</option>
-                    <option value="2">Adventure</option>
-                    <option value="3">Spectator</option>
-                  </select>
-                  </div>
-                  <div class="form-input">
-                  <label class="form-check-label" for="server_difficulty">
-                    Difficulty
-                  </label>
-                  <select id="server_difficulty" class="form-select mb-3">
-                    <option value="1">Easy</option>
-                    <option value="0">Peaceful</option>
-                    <option value="2">Normal</option>
-                    <option value="3">Hard</option>
-                  </select>
-                  </div>
-                  </div>
-                  <hr class="my-4">
-                  <div class="d-flex justify-content-between">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_whitelist}" id="server_whitelist">
-                    <label class="form-check-label" for="server_whitelist">Whitelist</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_cracked}" id="server_cracked">
-                    <label class="form-check-label" for="server_cracked">Cracked</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_pvp}" id="server_pvp">
-                    <label class="form-check-label" for="server_pvp">PVP</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_commandblocks}" id="server_commandblocks">
-                    <label class="form-check-label" for="server_commandblocks">Commandblocks</label>
-                  </div>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_fly}" id="server_fly">
-                    <label class="form-check-label" for="server_fly">Fly</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_animals}" id="server_animals">
-                    <label class="form-check-label" for="server_animals">Animals</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_monster}" id="server_monster">
-                    <label class="form-check-label" for="server_monster">Monster</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_villagers}" id="server_villagers">
-                    <label class="form-check-label" for="server_villagers">Villagers</label>
-                  </div>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_force_gamemode}" id="server_force_gamemode">
-                    <label class="form-check-label" for="server_force_gamemode">Force Gamemode</label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input mb-3" type="checkbox" value="${server_conf_nether}" id="server_nether">
-                    <label class="form-check-label" for="server_nether">Nether</label>
-                  </div>
-                  </div>
-                  <hr class="my-4">
-                  <div class="form-input">
-                  <label class="form-check-label" for="server_resource_pack">
-                    Resource pack URL
-                  </label>
-                  <input value="${server_conf_resource_pack_url}" class="form-control" id="server_resource_pack" type="input" placeholder="http://example.com/Resource_pack.zip"/>
-                  </div>
-                  <p></p>
-                  <center><button onclick="update_options_server();" type="button" class="btn btn-primary">Update Options</button></center>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div id="console" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fa fa-terminal"></i> Console</div>
-                  <div style="color:White;" class="card-body">
-                  <ul id="console_messages" style="height: 20rem; background-color: black;" class="text-light rounded p-3 overflow-scroll">
-                    <h6 id="console_online_log">$> Console Version => 1.0.8</h6>
-                    <center><h1 id="console_offline_log">Offline <i class="fa fa-signal"></i></h1></center>
-                  </ul>
-                  <div id="sendcmddiv">
-                  <div class="d-flex">
-                  <input class="form-control m-1" id="cmd_send_elment" placeholder="say hello">
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div id="log" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fas fa-file-alt"></i> Log</div>
-                  <div style="color:White;" class="card-body">
-                  <ul id="log_txt" style="height: 20rem; background-color: black;" class="text-light rounded p-3 overflow-scroll">
-                    <h6>Loading Information Please Wait...</h6>
-                  </ul>
-                  <div id="update_log_btn">
-                  <center><button onclick="update_log();" class="btn btn-primary" type="submit">Update Log</button></center>
-                  </div>
-                  <div id="update_log_wait">
-                  <center><h5>Please wait 5 seconds for the next update</h5></center>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div id="setup" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fa fa-briefcase"></i> Setup</div>
-                  <div class="card-body">
-                  <div id="diverr_st_101" class="alert alert-success" role="alert">
-                  <center>Setup Changed Successfully!</center>
-                  </div>
-                  <div id="diverr_st_102" class="alert alert-danger" role="alert">
-                  <center>Requests are not complete!</center>
-                  </div>
-                  <div id="diverr_st_103" class="alert alert-danger" role="alert">
-                  <center>ServerPort value are not allowed</center>
-                  </div>
-                  <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="new_port" name="new_port" placeholder="Server Port">
-                  <label for="new_port">Server Port</label>
+                    <div id='online' style="background-color: #525252; color:White;" class="card-footer">
+                        <center>
+                            <h4 id='online_txt'><i class="fas fa-stop-circle"></i> Starting ...</h4>
+                        </center>
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="new_min_ram" name="new_min_ram" placeholder="Min Ram Use G">
-                  <label for="new_min_ram">Min Ram Use (G)</label>
+            </div>
+        </div>
+        <h1> </h1>
+        <div id="server_start">
+            <center><button onclick='start_server();' type="button" class="btn btn-lg btn-success"><i
+                        class="fa fa-power-off"></i> Start</button></center>
+        </div>
+        <center>
+            <div id="server_stop_kill"><button onclick='stop_server();' type="button" class="btn btn-lg btn-danger"><i
+                        class="fas fa-stop-circle"></i> Stop</button> <button onclick='kill_server();' type="button"
+                    class="btn btn-lg btn-danger"><i class="	fa fa-exclamation-triangle"></i> Kill</button></div>
+        </center>
+        <div class="row row-cols-1 row-cols-lg-2">
+            <div class="col pb-2 mt-3">
+                <div class="card bg-dark">
+                    <div style="color:White;" class="card-header"><i class="fas fa-memory"></i> Ram Use</div>
+                    <div class="card-body">
+                        <canvas id="Ramchart" style="width: 100%; height: 100%"></canvas>
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="new_max_ram" name="new_max_ram" placeholder="Max Ram Use G">
-                  <label for="new_max_ram">Max Ram Use (G)</label>
+            </div>
+            <div class="col pb-2 mt-3">
+                <div class="card bg-dark">
+                    <div style="color:White;" class="card-header"><i class="fa fa-microchip"></i> CPU Use</div>
+                    <div class="card-body">
+                        <canvas id="Cpuchart" style="width: 100%; height: 100%"></canvas>
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="new_servername" name="new_servername" placeholder="Server Name">
-                  <label for="new_servername">Server Name</label>
+            </div>
+        </div>
+    </div>
+    <div id="options" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-body">
+                    <div id="diverr_uo_101" class="alert alert-success" role="alert">
+                        <center>Successfully!</center>
+                    </div>
+                    <div id="diverr_uo_102" class="alert alert-danger" role="alert">
+                        <center>Error!</center>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <img src="/static/server-icon.png" class="rounded float-right" alt="64">
+                        <div style="margin-left: 15px;">
+                            <h4>${serverip}:${serverport}</h4>
+                            <input id="server_motd" placeholder="Server Motd" type="text" class="form-control"
+                                value="${server_conf_motd}" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-select mb-3">
-                <label class="form-check-label" for="new_software">
-                  Minecraft Server Software
-                </label>
-                <select id="new_software" class="form-select mb-3">
-                  <option value="feathermc">FeatherMC Only (1.8.8)</option>
-                  <option value="paper">Paper</option>
-                  <option value="spigot">Spigot</option>
-                </select>
+            </div>
+        </div>
+        <div class="col pb-0 mt-0">
+            <div style="margin-top: 35px;" class="card bg-dark">
+                <div style="color:White;" class="card-header"><i class="fa fa-cog"></i> Server.properties</div>
+                <div style="color:White;" class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="form-input">
+                            <label class="form-check-label" for="server_spawn_protection">
+                                Spawn Protection
+                            </label>
+                            <input class="form-control" id="server_spawn_protection" type="number" step="1" min="1"
+                                max="30000000" value="${server_conf_spawn_protection}" />
+                        </div>
+                        <div class="form-input mb-3">
+                            <label class="form-check-label" for="server_slots">
+                                Slots
+                            </label>
+                            <input class="form-control" id="server_slots" type="number" step="1" min="1"
+                                max="2147483647" value="${server_conf_slots}" />
+                        </div>
+                        <div class="form-input">
+                            <label class="form-check-label" for="server_gamemode">
+                                Gamemode
+                            </label>
+                            <select id="server_gamemode" class="form-select mb-3">
+                                <option value="0">Survival</option>
+                                <option value="1">Creative</option>
+                                <option value="2">Adventure</option>
+                                <option value="3">Spectator</option>
+                            </select>
+                        </div>
+                        <div class="form-input">
+                            <label class="form-check-label" for="server_difficulty">
+                                Difficulty
+                            </label>
+                            <select id="server_difficulty" class="form-select mb-3">
+                                <option value="1">Easy</option>
+                                <option value="0">Peaceful</option>
+                                <option value="2">Normal</option>
+                                <option value="3">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-between">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_whitelist}"
+                                id="server_whitelist">
+                            <label class="form-check-label" for="server_whitelist">Whitelist</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_cracked}"
+                                id="server_cracked">
+                            <label class="form-check-label" for="server_cracked">Cracked</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_pvp}"
+                                id="server_pvp">
+                            <label class="form-check-label" for="server_pvp">PVP</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_commandblocks}"
+                                id="server_commandblocks">
+                            <label class="form-check-label" for="server_commandblocks">Commandblocks</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_fly}"
+                                id="server_fly">
+                            <label class="form-check-label" for="server_fly">Fly</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_animals}"
+                                id="server_animals">
+                            <label class="form-check-label" for="server_animals">Animals</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_monster}"
+                                id="server_monster">
+                            <label class="form-check-label" for="server_monster">Monster</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_villagers}"
+                                id="server_villagers">
+                            <label class="form-check-label" for="server_villagers">Villagers</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_force_gamemode}"
+                                id="server_force_gamemode">
+                            <label class="form-check-label" for="server_force_gamemode">Force Gamemode</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mb-3" type="checkbox" value="${server_conf_nether}"
+                                id="server_nether">
+                            <label class="form-check-label" for="server_nether">Nether</label>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="form-input">
+                        <label class="form-check-label" for="server_resource_pack">
+                            Resource pack URL
+                        </label>
+                        <input value="${server_conf_resource_pack_url}" class="form-control" id="server_resource_pack"
+                            type="input" placeholder="http://example.com/Resource_pack.zip" />
+                    </div>
+                    <p></p>
+                    <center><button onclick="update_options_server();" type="button" class="btn btn-primary">Update
+                            Options</button></center>
                 </div>
-                <div class="form-select mb-3">
-                <label class="form-check-label" for="new_version">
-                  Minecraft Server Version
-                </label>
-                <select id="new_version" class="form-select mb-3">
-                  <option value="1.18.1">1.18.1</option>
-                  <option value="1.17.1">1.17.1</option>
-                  <option value="1.16.5">1.16.5</option>
-                  <option value="1.15.2">1.15.2</option>
-                  <option value="1.14.4">1.14.4</option>
-                  <option value="1.13.2">1.13.2</option>
-                  <option value="1.12.2">1.12.2</option>
-                  <option value="1.11.2">1.11.2</option>
-                  <option value="1.10.2">1.10.2</option>
-                  <option value="1.9.4">1.9.4</option>
-                  <option value="1.8.8">1.8.8</option>
-                </select>
+            </div>
+        </div>
+    </div>
+    <div id="console" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-header"><i class="fa fa-terminal"></i> Console</div>
+                <div style="color:White;" class="card-body">
+                    <ul id="console_box" style="height: 28rem; background-color: black;"
+                        class="text-light rounded p-3 overflow-scroll">
+                        <div id="container">
+                            <h6 id="console_online_log">> Console Version => 1.1.0</h6>
+                            <ul id="console_messages"></ul>
+                            <div id="input-line" class="input-line">
+                                <div class="prompt"></div>
+                                <div id="sendcmddiv" class="form-input"><label class="form-check-label" for="cmd_send_elment">></label><input id="cmd_send_elment" class="cmdline" autofocus /></div>
+                            </div>
+                        </div>
+                    </ul>
+                    <ul id="console_offline_log" style="height: 20rem; background-color: black;"
+                        class="text-light rounded p-3 overflow-scroll">
+                        <center>
+                            <h1>Offline <i class="fa fa-signal"></i></h1>
+                        </center>
+                    </ul>
                 </div>
-                  <div class="d-grid">
-                    <button onclick="ch_setup();" class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Update Setup</button>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <div id="addons" class="main">
-                  ${dash_main}
-                  </div>
-                  <div id="profile" class="main">
-                  <div class="col pb-0 mt-0"><div class="card bg-dark">
-                  <div style="color:White;" class="card-header"><i class="fa fa-address-card"></i> Profile</div>
-                  <div style="color:White;" class="card-body">
-                  <h4>User Name: ${username}</h4>
-                  <h4>Password: *********</h4>
-                  <hr class="my-4">
-                  <div id="diverr_pr_102" class="alert alert-success" role="alert">
-                  <center>Password Changed Successfully!</center>
-                  </div>
-                  <div id="diverr_pr_101" class="alert alert-danger" role="alert">
-                  <center>The Last Password Entered Is Incorrect.</center>
-                  </div>
-                  <h4>Change Password</h4>
-                  <div style="color:Black;" class="form-floating mb-3">
-                    <input type="password" class="form-control" id="chlastpassword" name="chlastpassword" placeholder="Last Password">
-                    <label for="chlastpassword">Last Password</label>
-                  </div>
-                  <div style="color:Black;" class="form-floating mb-3">
-                    <input type="password" class="form-control" id="chnewpassword" name="chnewpassword" placeholder="New Password">
-                    <label for="chnewpassword">New Password</label>
-                  </div>
-                  <div class="d-grid">
-                    <button onclick="ch_pass();" class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Change Password</button>
-                  </div>
-                  <hr class="my-4">
-                  <div class="d-grid mb-2">
-                    <a href="https://yellow-team.xyz/"><center><button class="btn btn-yellow-team btn-login text-uppercase fw-bold">Power By Yellow Team</button></center></a>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <script>
-                  const socket = io('http://${webip}:${webserverport}/');
-                  const xhttp = new XMLHttpRequest();
-                  const new_port_v = document.getElementById('new_port');
-                  const new_min_ram_v = document.getElementById('new_min_ram');
-                  const new_max_ram_v = document.getElementById('new_max_ram');
-                  const new_servername_v = document.getElementById('new_servername');
-                  const new_software_v = document.getElementById('new_software');
-                  const new_version_v = document.getElementById('new_version');
-                  const onlinediv = document.getElementById('online');
-                  const onlinetxt = document.getElementById('online_txt');
-                  const chlastpassword = document.getElementById('chlastpassword');
-                  const chnewpassword = document.getElementById('chnewpassword');
-                  const console_box = document.getElementById('console_messages');
-                  const txt_log = document.getElementById('log_txt');
-                  const cmd_send = document.getElementById('cmd_send_elment');
-                  const server_motd = document.getElementById('server_motd');
-                  const server_commandblocks = document.getElementById('server_commandblocks');
-                  const server_whitelist = document.getElementById('server_whitelist');
-                  const server_cracked = document.getElementById('server_cracked');
-                  const server_pvp = document.getElementById('server_pvp');
-                  const server_fly = document.getElementById('server_fly');
-                  const server_animals = document.getElementById('server_animals');
-                  const server_monster = document.getElementById('server_monster');
-                  const server_villagers = document.getElementById('server_villagers');
-                  const server_nether = document.getElementById('server_nether');
-                  const server_force_gamemode = document.getElementById('server_force_gamemode');
-                  const server_spawn_protection = document.getElementById('server_spawn_protection');
-                  const server_slots = document.getElementById('server_slots');
-                  const server_gamemode = document.getElementById('server_gamemode');
-                  const server_difficulty = document.getElementById('server_difficulty');
-                  const server_resource_pack_url = document.getElementById('server_resource_pack');
-                  let serverstatus = '${serverstatus}';
-                  localStorage.setItem("token", "${login_token}");
-                  function update_options_server() {
-                    if(server_motd==""){
-                      $("#diverr_uo_102").show();
-                      setTimeout(() => {
-                        $("#diverr_uo_102").hide();
-                      }, 3000);
-                    }else{
-                      xhttp.open("POST", "/dashboard/", true);
-                      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                      xhttp.send("sendsocketkey=${sendsocketkey}&event=update_server_conf&motd="+server_motd.value+"&server_commandblocks="+server_commandblocks.value+"&server_whitelist="+server_whitelist.value+"&server_cracked="+server_cracked.value+"&server_pvp="+server_pvp.value+"&server_fly="+server_fly.value+"&server_animals="+server_animals.value+"&server_monster="+server_monster.value+"&server_villagers="+server_villagers.value+"&server_nether="+server_nether.value+"&server_force_gamemode="+server_force_gamemode.value+"&server_spawn_protection="+server_spawn_protection.value+"&server_slots="+server_slots.value+"&server_gamemode="+server_gamemode.value+"&server_difficulty="+server_difficulty.value+"&server_resource_pack_url="+server_resource_pack_url.value);
-                      $("#diverr_uo_101").show();
-                    }  
-                  }
-                  function start_server() {
-                    if(serverstatus == 'off'){
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&event=startserver");
-                    }
-                  }
-                  function stop_server() {
-                    if(serverstatus == 'on'){
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&event=stopserver");
-                    }
-                  }
-                  function kill_server() {
-                    if(serverstatus == 'on'){
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&event=killserver");
-                    }
-                  }
-                  function ch_pass() {
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&chlastpassword="+chlastpassword.value+"&chnewpassword="+chnewpassword.value);				
-                  }
-                  function ch_setup(){
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&new_port_v="+new_port_v.value+"&new_min_ram_v="+new_min_ram_v.value+"&new_max_ram_v="+new_max_ram_v.value+"&new_servername_v="+new_servername_v.value+"&new_software_v="+new_software_v.value+"&new_version_v="+new_version_v.value);
-                  }
-                  cmd_send.addEventListener("keydown", function (e) {if (e.key === "Enter") {
-                    send_cmd_console();
-                  }});
-                  function send_cmd_console() {
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&event=cmd_console&cmd_send="+cmd_send.value);	
-                    cmd_send.value="";
-                  }
-                  function update_log() {
-                    xhttp.open("POST", "/dashboard/", true);
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send("sendsocketkey=${sendsocketkey}&event=update_log");
-                    $("#update_log_btn").hide();
-                    $("#update_log_wait").show();
-                    setTimeout(() => {
-                      $("#update_log_btn").show();
-                      $("#update_log_wait").hide(); 
-                    }, 5000);
-                  }
-                  socket.on("${socketiokey}_updateoptions_error", function(uoerror) {
-                    if(uoerror=="101"){
-                      $("#diverr_uo_101").show();
-                      setTimeout(() => {
-                        $("#diverr_uo_101").hide();
-                      }, 3000);
-                    }
-                  });
-                  let console_log_bugfix = "";
-                  socket.on('${socketiokey}_console_log', function(console_msg) {
-                    if(console_log_bugfix != console_msg){
-                      var item = document.createElement('h6');
-                      item.textContent = console_msg;
-                      console_box.appendChild(item);
-                      console_box.scrollTo(0, document.body.scrollHeight);
-                      console_log_bugfix = console_msg;
-                    }else{
-                      console_log_bugfix = "";
-                    }
-                  });
-                  socket.on('${socketiokey}_reload', function(reload_msg) {if(reload_msg=="reload"){location.reload();}});
-                  socket.on('${socketiokey}_log', function(log_data) {var item = document.createElement('h6');item.textContent = log_data;txt_log.appendChild(item);txt_log.scrollTo(0, document.body.scrollHeight);});
-                  socket.on('${socketiokey}_setup_v_error', function(errormsg){if(errormsg=="101"){$("#diverr_st_102").hide();$("#diverr_st_101").show();$("#diverr_st_103").hide();new_port_v.value = "";new_min_ram_v.value = "";new_max_ram_v.value = "";new_servername_v.value = "";setTimeout(() => {$("#diverr_st_102").hide();$("#diverr_st_101").hide();$("#diverr_st_103").hide();}, 3000);}if(errormsg=="102"){$("#diverr_st_102").show();$("#diverr_st_101").hide();$("#diverr_st_103").hide();setTimeout(() => {$("#diverr_st_102").hide();$("#diverr_st_101").hide();$("#diverr_st_103").hide();}, 3000);}if(errormsg=="103"){$("#diverr_st_102").hide();$("#diverr_st_101").hide();$("#diverr_st_103").show();setTimeout(() => {$("#diverr_st_102").hide();$("#diverr_st_101").hide();$("#diverr_st_103").hide();}, 3000);}});
-                  socket.on('${socketiokey}_profile_error', function(errormsg){if(errormsg=="101"){$("#diverr_pr_102").hide();$("#diverr_pr_101").show();chlastpassword.value="";setTimeout(() => {$("#diverr_pr_102").hide();$("#diverr_pr_101").hide();}, 3000);}if(errormsg=="102"){$("#diverr_pr_102").show();$("#diverr_pr_101").hide();chlastpassword.value="";chnewpassword.value="";setTimeout(() => {$("#diverr_pr_102").hide();$("#diverr_pr_101").hide();}, 3000);}});
-                  socket.on('${socketiokey}_status', function(status) {serverstatus=status;});
-                  socket.on('${socketiokey}_server_online', function(status_online) {onlinediv.style.backgroundColor ='#32FF00';onlinetxt.textContent=status_online;});
-                  socket.on('${socketiokey}_ramdata', ramdata => {RamChart.data.datasets[0].data.push(ramdata);if(RamChart.data.datasets[0].data.length>9) RamChart.data.datasets[0].data.shift();RamChart.update();});
-                  socket.on('${socketiokey}_cpudata', cpudata => {CpuChart.data.datasets[0].data.push(cpudata);if(CpuChart.data.datasets[0].data.length>9) CpuChart.data.datasets[0].data.shift();CpuChart.update();});
-                  const ctx = document.getElementById('Ramchart').getContext('2d');const RamChart = new Chart(ctx, {type: 'line',data: {labels: ['15','14','13','12','11','10', '9', '8', '7', '6', '5', '4', '3', '2','1'],datasets: [{label: 'System Ram Use',data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0],backgroundColor: ['rgb(255, 99, 132)'],borderColor: ['rgb(255, 99, 132)'],borderWidth: 1}]},options: {scales: {y: {beginAtZero: true}}}});
-                  const ctx2 = document.getElementById('Cpuchart').getContext('2d');const CpuChart = new Chart(ctx2, {type: 'line',data: {labels: ['15','14','13','12','11','10', '9', '8', '7', '6', '5', '4', '3', '2','1'],datasets: [{label: 'System Cpu Use',data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0],backgroundColor: ['rgb(255, 99, 132)'],borderColor: ['rgb(255, 99, 132)'],borderWidth: 1}]},options: {scales: {y: {beginAtZero: true}}}});
-                  setInterval(() => {if(serverstatus == 'off'){$("#server_start").show();$("#server_stop_kill").hide();$("#online").hide();$("#offline").show();$("#sendcmddiv").hide();$("#console_offline_log").show();$("#console_online_log").hide();onlinediv.style.backgroundColor ='#525252';onlinetxt.textContent="Starting ...";}else{if(serverstatus == 'on'){$("#server_start").hide();$("#server_stop_kill").show();$("#online").show();$("#offline").hide();$("#sendcmddiv").show();$("#console_offline_log").hide();$("#console_online_log").show();}}},10);
-                  $("#diverr_pr_102").hide();$("#diverr_pr_101").hide();$("#diverr_uo_101").hide();$("#diverr_uo_102").hide();$("#diverr_st_103").hide();$("#diverr_st_102").hide();$("#diverr_st_101").hide();$("#server").show();$("#options").hide();$("#console").hide();$("#addons").hide();$("#log").hide();$("#setup").hide();$("#profile").hide();$("#update_log_btn").show();$("#update_log_wait").hide();$('#server_commandblocks')[0].checked = ${server_conf_commandblocks};$('#server_whitelist')[0].checked = ${server_conf_whitelist};$('#server_cracked')[0].checked = ${server_conf_cracked};$('#server_pvp')[0].checked = ${server_conf_pvp};$('#server_fly')[0].checked = ${server_conf_fly};$('#server_animals')[0].checked = ${server_conf_animals};$('#server_monster')[0].checked = ${server_conf_monster};$('#server_villagers')[0].checked = ${server_conf_villagers};$('#server_nether')[0].checked = ${server_conf_nether};$('#server_force_gamemode')[0].checked = ${server_conf_force_gamemode};$('#server_gamemode').val('${server_conf_gamemode}');$('#server_difficulty').val('${server_conf_difficulty}');
-                  $("#server_commandblocks").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_whitelist").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_cracked").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_pvp").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_fly").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_animals").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_monster").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_villagers").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_nether").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});$("#server_force_gamemode").on('change', function() {if ($(this).is(':checked')) {$(this).attr('value', 'true');} else {$(this).attr('value', 'false');}});
-                  function server_m() {$("#server").show();$("#console").hide();$("#log").hide();$("#setup").hide();$("#options").hide();$("#profile").hide();$("#addons").hide();}
-                  function options_m() {$("#server").hide();$("#console").hide();$("#log").hide();$("#setup").hide();$("#options").show();$("#profile").hide();$("#addons").hide();}
-                  function console_m() {$("#server").hide();$("#console").show();$("#log").hide();$("#options").hide();$("#setup").hide();$("#profile").hide();$("#addons").hide();}
-                  function log_m() {$("#server").hide();$("#console").hide();$("#log").show();$("#setup").hide();$("#options").hide();$("#profile").hide();$("#addons").hide();}
-                  function setup_m() {$("#server").hide();$("#console").hide();$("#log").hide();$("#setup").show();$("#options").hide();$("#profile").hide();$("#addons").hide();}
-                  function profile_m() {$("#server").hide();$("#console").hide();$("#log").hide();$("#options").hide();$("#setup").hide();$("#profile").show();$("#addons").hide();}
-                  function addon_m() {$("#server").hide();$("#console").hide();$("#log").hide();$("#options").hide();$("#setup").hide();$("#profile").hide();$("#addons").show();}
-                  ${dash_script}
-                  </script>
-              </body>
-            </html>`);
+            </div>
+        </div>
+    </div>
+    <div id="log" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-header"><i class="fas fa-file-alt"></i> Log</div>
+                <div style="color:White;" class="card-body">
+                    <ul id="log_txt" style="height: 20rem; background-color: black;"
+                        class="text-light rounded p-3 overflow-scroll">
+                        <h6>Loading Information Please Wait...</h6>
+                    </ul>
+                    <div id="update_log_btn">
+                        <center><button onclick="update_log();" class="btn btn-primary" type="submit">Update
+                                Log</button></center>
+                    </div>
+                    <div id="update_log_wait">
+                        <center>
+                            <h5>Please wait 5 seconds for the next update</h5>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="setup" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-header"><i class="fa fa-briefcase"></i> Setup</div>
+                <div class="card-body">
+                    <div id="diverr_st_101" class="alert alert-success" role="alert">
+                        <center>Setup Changed Successfully!</center>
+                    </div>
+                    <div id="diverr_st_102" class="alert alert-danger" role="alert">
+                        <center>Requests are not complete!</center>
+                    </div>
+                    <div id="diverr_st_103" class="alert alert-danger" role="alert">
+                        <center>ServerPort value are not allowed</center>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input value="${serverport}" type="text" class="form-control" id="new_port" name="new_port"
+                            placeholder="Server Port">
+                        <label for="new_port">Server Port</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input value="${min_ram}" type="text" class="form-control" id="new_min_ram" name="new_min_ram"
+                            placeholder="Min Ram Use G">
+                        <label for="new_min_ram">Min Ram Use (G)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input value="${max_ram}" type="text" class="form-control" id="new_max_ram" name="new_max_ram"
+                            placeholder="Max Ram Use G">
+                        <label for="new_max_ram">Max Ram Use (G)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input value="${servername}" type="text" class="form-control" id="new_servername"
+                            name="new_servername" placeholder="Server Name">
+                        <label for="new_servername">Server Name</label>
+                    </div>
+                    <div class="form-select mb-3">
+                        <label class="form-check-label" for="new_software">
+                            Minecraft Server Software
+                        </label>
+                        <select id="new_software" class="form-select mb-3">
+                            <option value="feathermc">FeatherMC Only (1.8.8)</option>
+                            <option value="paper">Paper</option>
+                            <option value="spigot">Spigot</option>
+                        </select>
+                    </div>
+                    <div class="form-select mb-3">
+                        <label class="form-check-label" for="new_version">
+                            Minecraft Server Version
+                        </label>
+                        <select id="new_version" class="form-select mb-3">
+                            <option value="1.18.1">1.18.1</option>
+                            <option value="1.17.1">1.17.1</option>
+                            <option value="1.16.5">1.16.5</option>
+                            <option value="1.15.2">1.15.2</option>
+                            <option value="1.14.4">1.14.4</option>
+                            <option value="1.13.2">1.13.2</option>
+                            <option value="1.12.2">1.12.2</option>
+                            <option value="1.11.2">1.11.2</option>
+                            <option value="1.10.2">1.10.2</option>
+                            <option value="1.9.4">1.9.4</option>
+                            <option value="1.8.8">1.8.8</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button onclick="ch_setup();" class="btn btn-primary btn-login text-uppercase fw-bold"
+                            type="submit">Update Setup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addons" class="main">
+    ${dash_main}
+    </div>
+    <div id="profile" class="main">
+        <div class="col pb-0 mt-0">
+            <div class="card bg-dark">
+                <div style="color:White;" class="card-header"><i class="fa fa-address-card"></i> Profile</div>
+                <div style="color:White;" class="card-body">
+                    <h4>User Name: ${username}</h4>
+                    <h4>Password: *********</h4>
+                    <hr class="my-4">
+                    <div id="diverr_pr_102" class="alert alert-success" role="alert">
+                        <center>Password Changed Successfully!</center>
+                    </div>
+                    <div id="diverr_pr_101" class="alert alert-danger" role="alert">
+                        <center>The Last Password Entered Is Incorrect.</center>
+                    </div>
+                    <h4>Change Password</h4>
+                    <div style="color:Black;" class="form-floating mb-3">
+                        <input type="password" class="form-control" id="chlastpassword" name="chlastpassword"
+                            placeholder="Last Password">
+                        <label for="chlastpassword">Last Password</label>
+                    </div>
+                    <div style="color:Black;" class="form-floating mb-3">
+                        <input type="password" class="form-control" id="chnewpassword" name="chnewpassword"
+                            placeholder="New Password">
+                        <label for="chnewpassword">New Password</label>
+                    </div>
+                    <div class="d-grid">
+                        <button onclick="ch_pass();" class="btn btn-primary btn-login text-uppercase fw-bold"
+                            type="submit">Change Password</button>
+                    </div>
+                    <hr class="my-4">
+                    <div class="d-grid mb-2">
+                        <a href="https://yellow-team.xyz/">
+                            <center><button class="btn btn-yellow-team btn-login text-uppercase fw-bold">Power By Yellow
+                                    Team</button></center>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const socket = io('http://${webip}:${webserverport}/');
+        const xhttp = new XMLHttpRequest();
+        const new_port_v = document.getElementById('new_port');
+        const new_min_ram_v = document.getElementById('new_min_ram');
+        const new_max_ram_v = document.getElementById('new_max_ram');
+        const new_servername_v = document.getElementById('new_servername');
+        const new_software_v = document.getElementById('new_software');
+        const new_version_v = document.getElementById('new_version');
+        const onlinediv = document.getElementById('online');
+        const onlinetxt = document.getElementById('online_txt');
+        const chlastpassword = document.getElementById('chlastpassword');
+        const chnewpassword = document.getElementById('chnewpassword');
+        const console_box = document.getElementById('console_messages');
+        const txt_log = document.getElementById('log_txt');
+        const cmd_send = document.getElementById('cmd_send_elment');
+        const server_motd = document.getElementById('server_motd');
+        const server_commandblocks = document.getElementById('server_commandblocks');
+        const server_whitelist = document.getElementById('server_whitelist');
+        const server_cracked = document.getElementById('server_cracked');
+        const server_pvp = document.getElementById('server_pvp');
+        const server_fly = document.getElementById('server_fly');
+        const server_animals = document.getElementById('server_animals');
+        const server_monster = document.getElementById('server_monster');
+        const server_villagers = document.getElementById('server_villagers');
+        const server_nether = document.getElementById('server_nether');
+        const server_force_gamemode = document.getElementById('server_force_gamemode');
+        const server_spawn_protection = document.getElementById('server_spawn_protection');
+        const server_slots = document.getElementById('server_slots');
+        const server_gamemode = document.getElementById('server_gamemode');
+        const server_difficulty = document.getElementById('server_difficulty');
+        const server_resource_pack_url = document.getElementById('server_resource_pack');
+        let serverstatus = '${serverstatus}';
+        localStorage.setItem("token", "${login_token}");
+        function update_options_server() {
+            if (server_motd == "") {
+                $("#diverr_uo_102").show();
+                setTimeout(() => {
+                    $("#diverr_uo_102").hide();
+                }, 3000);
+            } else {
+                xhttp.open("POST", "/dashboard/", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("sendsocketkey=${sendsocketkey}&event=update_server_conf&motd=" + server_motd.value + "&server_commandblocks=" + server_commandblocks.value + "&server_whitelist=" + server_whitelist.value + "&server_cracked=" + server_cracked.value + "&server_pvp=" + server_pvp.value + "&server_fly=" + server_fly.value + "&server_animals=" + server_animals.value + "&server_monster=" + server_monster.value + "&server_villagers=" + server_villagers.value + "&server_nether=" + server_nether.value + "&server_force_gamemode=" + server_force_gamemode.value + "&server_spawn_protection=" + server_spawn_protection.value + "&server_slots=" + server_slots.value + "&server_gamemode=" + server_gamemode.value + "&server_difficulty=" + server_difficulty.value + "&server_resource_pack_url=" + server_resource_pack_url.value);
+                $("#diverr_uo_101").show();
+            }
+        }
+        function start_server() {
+            if (serverstatus == 'off') {
+                xhttp.open("POST", "/dashboard/", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("sendsocketkey=${sendsocketkey}&event=startserver");
+            }
+        }
+        function stop_server() {
+            if (serverstatus == 'on') {
+                xhttp.open("POST", "/dashboard/", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("sendsocketkey=${sendsocketkey}&event=stopserver");
+            }
+        }
+        function kill_server() {
+            if (serverstatus == 'on') {
+                xhttp.open("POST", "/dashboard/", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("sendsocketkey=${sendsocketkey}&event=killserver");
+            }
+        }
+        function ch_pass() {
+            xhttp.open("POST", "/dashboard/", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("sendsocketkey=${sendsocketkey}&chlastpassword=" + chlastpassword.value + "&chnewpassword=" + chnewpassword.value);
+        }
+        function ch_setup() {
+            xhttp.open("POST", "/dashboard/", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("sendsocketkey=${sendsocketkey}&new_port_v=" + new_port_v.value + "&new_min_ram_v=" + new_min_ram_v.value + "&new_max_ram_v=" + new_max_ram_v.value + "&new_servername_v=" + new_servername_v.value + "&new_software_v=" + new_software_v.value + "&new_version_v=" + new_version_v.value);
+        }
+        cmd_send.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                send_cmd_console();
+            }
+        });
+        function send_cmd_console() {
+            xhttp.open("POST", "/dashboard/", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("sendsocketkey=${sendsocketkey}&event=cmd_console&cmd_send=" + cmd_send.value);
+            cmd_send.value = "";
+        }
+        function update_log() {
+            xhttp.open("POST", "/dashboard/", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("sendsocketkey=${sendsocketkey}&event=update_log");
+            $("#update_log_btn").hide();
+            $("#update_log_wait").show();
+            setTimeout(() => {
+                $("#update_log_btn").show();
+                $("#update_log_wait").hide();
+            }, 5000);
+        }
+        socket.on("${socketiokey}_updateoptions_error", function (uoerror) {
+            if (uoerror == "101") {
+                $("#diverr_uo_101").show();
+                setTimeout(() => {
+                    $("#diverr_uo_101").hide();
+                }, 3000);
+            }
+        });
+        let console_log_bugfix = "";
+        socket.on('${socketiokey}_console_log', function (console_msg) {
+            if (console_log_bugfix != console_msg) {
+                var item = document.createElement('h6');
+                item.textContent = console_msg;
+                console_box.appendChild(item);
+                //console_window.scrollTo(0, document.body.scrollHeight);
+                console_log_bugfix = console_msg;
+            } else {
+                console_log_bugfix = "";
+            }
+        });
+        socket.on('${socketiokey}_reload', function (reload_msg) { if (reload_msg == "reload") { location.reload(); } });
+        socket.on('${socketiokey}_log', function (log_data) { var item = document.createElement('h6'); item.textContent = log_data; txt_log.appendChild(item); txt_log.scrollTo(0, document.body.scrollHeight); });
+        socket.on('${socketiokey}_setup_v_error', function (errormsg) { if (errormsg == "101") { $("#diverr_st_102").hide(); $("#diverr_st_101").show(); $("#diverr_st_103").hide(); new_port_v.value = ""; new_min_ram_v.value = ""; new_max_ram_v.value = ""; new_servername_v.value = ""; setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_st_102").show(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "103") { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").show(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } });
+        socket.on('${socketiokey}_profile_error', function (errormsg) { if (errormsg == "101") { $("#diverr_pr_102").hide(); $("#diverr_pr_101").show(); chlastpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_pr_102").show(); $("#diverr_pr_101").hide(); chlastpassword.value = ""; chnewpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } });
+        socket.on('${socketiokey}_status', function (status) { serverstatus = status; });
+        socket.on('${socketiokey}_server_online', function (status_online) { onlinediv.style.backgroundColor = '#32FF00'; onlinetxt.textContent = status_online; });
+        socket.on('${socketiokey}_ramdata', ramdata => { RamChart.data.datasets[0].data.push(ramdata); if (RamChart.data.datasets[0].data.length > 9) RamChart.data.datasets[0].data.shift(); RamChart.update(); });
+        socket.on('${socketiokey}_cpudata', cpudata => { CpuChart.data.datasets[0].data.push(cpudata); if (CpuChart.data.datasets[0].data.length > 9) CpuChart.data.datasets[0].data.shift(); CpuChart.update(); });
+        const ctx = document.getElementById('Ramchart').getContext('2d'); const RamChart = new Chart(ctx, { type: 'line', data: { labels: ['15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'], datasets: [{ label: 'System Ram Use', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: ['rgb(255, 99, 132)'], borderColor: ['rgb(255, 99, 132)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true } } } });
+        const ctx2 = document.getElementById('Cpuchart').getContext('2d'); const CpuChart = new Chart(ctx2, { type: 'line', data: { labels: ['15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'], datasets: [{ label: 'System Cpu Use', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: ['rgb(255, 99, 132)'], borderColor: ['rgb(255, 99, 132)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true } } } });
+        setInterval(() => { if (serverstatus == 'off') { $("#console_box").hide(); $("#server_start").show(); $("#server_stop_kill").hide(); $("#online").hide(); $("#offline").show(); $("#sendcmddiv").hide(); $("#console_offline_log").show(); $("#console_online_log").hide(); onlinediv.style.backgroundColor = '#525252'; onlinetxt.textContent = "Starting ..."; } else { if (serverstatus == 'on') { $("#console_box").show(); $("#server_start").hide(); $("#server_stop_kill").show(); $("#online").show(); $("#offline").hide(); $("#sendcmddiv").show(); $("#console_offline_log").hide(); $("#console_online_log").show(); } } }, 10);
+        $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); $("#diverr_uo_101").hide(); $("#diverr_uo_102").hide(); $("#diverr_st_103").hide(); $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#server").show(); $("#options").hide(); $("#console").hide(); $("#addons").hide(); $("#log").hide(); $("#setup").hide(); $("#profile").hide(); $("#update_log_btn").show(); $("#update_log_wait").hide(); $('#server_commandblocks')[0].checked = ${ server_conf_commandblocks }; $('#server_whitelist')[0].checked = ${ server_conf_whitelist }; $('#server_cracked')[0].checked = ${ server_conf_cracked }; $('#server_pvp')[0].checked = ${ server_conf_pvp }; $('#server_fly')[0].checked = ${ server_conf_fly }; $('#server_animals')[0].checked = ${ server_conf_animals }; $('#server_monster')[0].checked = ${ server_conf_monster }; $('#server_villagers')[0].checked = ${ server_conf_villagers }; $('#server_nether')[0].checked = ${ server_conf_nether }; $('#server_force_gamemode')[0].checked = ${ server_conf_force_gamemode }; $('#server_gamemode').val('${server_conf_gamemode}'); $('#server_difficulty').val('${server_conf_difficulty}'); $('#new_software').val('${software}'); $('#new_version').val('${version}');
+        $("#server_commandblocks").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_whitelist").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_cracked").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_pvp").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_fly").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_animals").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_monster").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_villagers").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_nether").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_force_gamemode").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } });
+        function server_m() { $("#server").show(); $("#console").hide(); $("#log").hide(); $("#setup").hide(); $("#options").hide(); $("#profile").hide(); $("#addons").hide(); }
+        function options_m() { $("#server").hide(); $("#console").hide(); $("#log").hide(); $("#setup").hide(); $("#options").show(); $("#profile").hide(); $("#addons").hide(); }
+        function console_m() { $("#server").hide(); $("#console").show(); $("#log").hide(); $("#options").hide(); $("#setup").hide(); $("#profile").hide(); $("#addons").hide(); }
+        function log_m() { $("#server").hide(); $("#console").hide(); $("#log").show(); $("#setup").hide(); $("#options").hide(); $("#profile").hide(); $("#addons").hide(); }
+        function setup_m() { $("#server").hide(); $("#console").hide(); $("#log").hide(); $("#setup").show(); $("#options").hide(); $("#profile").hide(); $("#addons").hide(); }
+        function profile_m() { $("#server").hide(); $("#console").hide(); $("#log").hide(); $("#options").hide(); $("#setup").hide(); $("#profile").show(); $("#addons").hide(); }
+        function addon_m() { $("#server").hide(); $("#console").hide(); $("#log").hide(); $("#options").hide(); $("#setup").hide(); $("#profile").hide(); $("#addons").show(); }
+        ${ dash_script }
+    </script>
+</body>
+</html>`);
               } else {
                 if (setup == 1 && loadui == "off") {
                   if (req.body.logout) {
                     res.send(`<script>window.location.replace("/login/?errorcode=103");localStorage.setItem("token", "logout");</script>`);
                   } else {
-                    res.send(`<script>window.location.replace("/login/?errorcode=101");</script>`);
-                    fs.readFile('./data/blacklist_ip.ydb', 'utf8', function (err, data) {
-                      fs.writeFileSync('./data/blacklist_ip.ydb', data + '\n' + `${req.ipInfo.ip}`);
-                    });
-                    setTimeout(() => {
+                    if (sendsocket != sendsocketkey) {
+                      res.send(`<script>window.location.replace("/login/?errorcode=101");</script>`);
                       fs.readFile('./data/blacklist_ip.ydb', 'utf8', function (err, data) {
-                        let new_data = data.replace(`\n${req.ipInfo.ip}`, '');
-                        fs.writeFileSync('./data/blacklist_ip.ydb', `${new_data}`);
+                        fs.writeFileSync('./data/blacklist_ip.ydb', data + '\n' + `${req.ipInfo.ip}`);
                       });
-                    }, 10000);
-
+                      setTimeout(() => {
+                        fs.readFile('./data/blacklist_ip.ydb', 'utf8', function (err, data) {
+                          let new_data = data.replace(`\n${req.ipInfo.ip}`, '');
+                          fs.writeFileSync('./data/blacklist_ip.ydb', `${new_data}`);
+                        });
+                      }, 10000);
+                    }
                   }
-
                 }
               }
             }
