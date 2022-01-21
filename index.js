@@ -900,7 +900,7 @@ fs.readFile('config.yco', 'utf8', function (err, data) {
             outline: none;
             background-color: transparent;
             margin: 0;
-            width: 50%;
+            width: 95%;
             font: inherit;
             border: none;
             color: inherit;
