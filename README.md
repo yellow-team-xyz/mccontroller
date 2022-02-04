@@ -57,7 +57,7 @@ Addons API
 - lib.serverip ==> minecraft server ip
 ```
 
-Exmaple Addons
+Exmaple Addon
 
 
 ```
