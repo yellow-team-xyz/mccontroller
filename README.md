@@ -13,6 +13,8 @@ IMAGE
 - 👋 Hi, I’m @yellow-team-xyz
 - 👀 website yellow-team.xyz
 - 📫 Discord: discord.gg/J959TmcxhE
+
+
 Addons API
 > Exports import Html to dashboard_page login_page home_page
 - exports.login_head = '<link rel="stylesheet" href="http://example.com/style.css">';
@@ -52,7 +54,11 @@ Addons API
 - lib.webip ==> web server ip
 - lib.multipleips ==> "true" or "false"
 - lib.serverip ==> minecraft server ip
+
+
 Exmaple Addons
+
+
 `
 //Uptime Plugin
 
