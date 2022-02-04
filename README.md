@@ -59,8 +59,7 @@ Addons API
 Exmaple Addons
 
 
-`
-//Uptime Plugin
+```//Uptime Plugin
 
 const lib = require('../index.js');
 
@@ -105,4 +104,4 @@ setInterval(() => {
     }
     lib.io.emit(`${socketuptime_plugin}_uptime_plugin`,`Uptime: Days: ${da} Hours: ${ho} Minutes: ${mi} Seconds: ${sc}`);
 }, 1000);
-`
+```
