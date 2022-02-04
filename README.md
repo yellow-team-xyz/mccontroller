@@ -16,16 +16,17 @@ IMAGE
 
 
 Addons API
+```
 > Exports import Html to dashboard_page login_page home_page
-- exports.login_head = '<link rel="stylesheet" href="http://example.com/style.css">';
-- exports.login_main = '<h1>Test</h1>';
-- exports.login_script = 'var num1 = 5;';
-- exports.dash_head = '<link rel="stylesheet" href="http://example.com/style.css">';
-- exports.dash_main = '<h1>Test</h1>';
-- exports.dash_nav = '<h1>Test</h1>';
-- exports.dash_nav_side = '<h1>Test</h1>';
-- exports.dash_script = 'var num2 = 6;';
-- exports.home_html = '<h1>Welcome To TestCraft.Test</h1>;
+- exports.login_head = `<link rel="stylesheet" href="http://example.com/style.css">`;
+- exports.login_main = `<h1>Test</h1>`;
+- exports.login_script = `var num1 = 5;`;
+- exports.dash_head = `<link rel="stylesheet" href="http://example.com/style.css">`;
+- exports.dash_main = `<h1>Test</h1`';
+- exports.dash_nav = `<h1>Test</h1>`;
+- exports.dash_nav_side = `<h1>Test</h1>`;
+- exports.dash_script = `var num2 = 6;`;
+- exports.home_html = `<h1>Welcome To TestCraft.Test</h1>`;
 > For useing socket or express webserver add "const lib = require('../index.js');" for example and more
 - "lib.io.emit("dataname","test data");" Socket.io
 - POST "lib.app.post('/webbanip/', function(req, res){});" GET ""lib.app.get('/webbanip/', function(req, res){});"" Express.js
@@ -54,12 +55,13 @@ Addons API
 - lib.webip ==> web server ip
 - lib.multipleips ==> "true" or "false"
 - lib.serverip ==> minecraft server ip
-
+```
 
 Exmaple Addons
 
 
-```//Uptime Plugin
+```
+//Uptime Plugin
 
 const lib = require('../index.js');
 
