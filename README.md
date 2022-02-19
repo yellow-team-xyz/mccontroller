@@ -1,4 +1,5 @@
 # mccontroller
+![GitHub All Releases](https://img.shields.io/github/downloads/yellow-team-xyz/Deadcord/total?color=black) ![GitHub stars](https://img.shields.io/github/stars/yellow-team-xyz/Deadcord?style=social) ![GitHub watchers](https://img.shields.io/github/watchers/yellow-team-xyz/Deadcord?style=social)
 IMAGE
 ![This is an image](https://github.com/yellow-team-xyz/mccontroler/raw/main/screenshot/1.png)
 ![This is an image](https://github.com/yellow-team-xyz/mccontroler/raw/main/screenshot/9.png)
