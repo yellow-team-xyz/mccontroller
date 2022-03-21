@@ -67,15 +67,19 @@ function start_index() {
     webip = datajson.webip;
     serverip = datajson.serverip;
     multipleips = datajson.multipleips;
+    let use_ssl = 'http';
+    if (webserverport == 443) {
+      use_ssl = 'https';
+    }
     console.log('Done!'.green);
-    request.get(`http://api.yellow-team.ir/news/?event=mccontroller_news`, (error, resp, body) => {
+    request.get(`https://api.yellow-team.ir/api/?link=yellow-team&value=news_mccontroller`, (error, resp, body) => {
       if (body == undefined) {
         console.log('News: '.green + `Can't connect to server`.red);
       } else {
         console.log('News: '.green + `${body}`.yellow);
       }
     });
-    request.get(`https://api.yellow-team.ir/view/mccontroler_addons.html`, (error, resp, body) => {
+    request.get(`https://dll.yellow-team.ir/dll/views/mccontroler_addons.html`, (error, resp, body) => {
       if (body == undefined) {
         console.log('Addons Shop: '.green + `Can't connect to server`.red);
         addon_shop = '<center><h1>Addons Shop Offline</h1></center>'
@@ -84,7 +88,7 @@ function start_index() {
         console.log('Addons Shop: '.yellow + 'Enable'.green);
       }
     });
-    request.get(`https://api.yellow-team.ir/view/mccontroler_plugins.html`, (error, resp, body) => {
+    request.get(`https://api.yellow-team.ir/dll/views/mccontroler_plugins.html`, (error, resp, body) => {
       if (body == undefined) {
         console.log('Plugins Shop: '.green + `Can't connect to server`.red);
         plugin_shop = '<center><h1>Plugins Shop Offline</h1></center>'
@@ -239,7 +243,7 @@ function start_index() {
                 console.log("Done!".green);
               } else {
                 console.log('Jar file not found please wait'.yellow);
-                request.get(`https://api.yellow-team.ir/update/?event=minecraft_up&version=${version}&software=${software}`, (error, resp, body) => {
+                request.get(`https://api.yellow-team.ir/api/?link=yellow-team&value=minecraft_up_${software}_${version}`, (error, resp, body) => {
                   (async () => {
                     loadui = 'on';
                     console.log('Start Downloading | '.yellow + `Minecraft_${version} | `.green + `URL: ${body}`);
@@ -256,7 +260,7 @@ function start_index() {
               });
               console.log("Checking Server.Properties".yellow);
               fs.readFile('server/server.properties', 'utf8', function (err, data) {
-                server_split_conf = data.split("\r\n",);
+                server_split_conf = data.split("\r\n");
                 let server_conf_ex_cracked = '';
                 if (server_conf_cracked == 'true') {
                   server_conf_ex_cracked = 'false';
@@ -311,10 +315,19 @@ function start_index() {
                 }
               }, 1000);
               if (serverstatus == 'on') {
-                socket.emit(`${socketiokey}_console_log`, `Server is Online ✅`);
+                socket.emit(`${socketiokey}_console_log`, { message: 'Server is Online ✅', color: 'green' });
                 minecraft.stdout.on('data', function (data) {
                   if (data) {
-                    socket.emit(`${socketiokey}_console_log`, `${data}`);
+                    let console_color = '#f52121';
+                    let console_data = `${data}`;
+                    console_data = console_data.split(" ");
+                    if (console_data.includes('INFO]:') == true) {
+                      console_color = '#3c3cff';
+                    }
+                    if (console_data.includes('WARN]:') == true) {
+                      console_color = '#f9f947';
+                    }
+                    io.emit(`${socketiokey}_console_log`, { message: `${data}`, color: console_color });
                   }
                 });
               }
@@ -479,7 +492,7 @@ function start_index() {
                         Minecraft Server Version
                       </label>
                       <select name="new_version" class="form-select mb-3">
-                      <option value="1.18.1">1.18.1</option>
+                      <option value="1.18.2">1.18.2</option>
                       <option value="1.17.1">1.17.1</option>
                       <option value="1.16.5">1.16.5</option>
                       <option value="1.15.2">1.15.2</option>
@@ -511,6 +524,15 @@ function start_index() {
               </div>
             </div>
             </div>
+            <script>
+            const new_software = document.getElementById('new_software');
+            const new_version = document.getElementById('new_version');
+            setInterval(() => {
+              if(new_software.value=='feathermc'){
+                new_version.value = '1.8.8';
+              }
+            }, 10);
+            </script>
             </body>
         </html>`);
                 } else {
@@ -642,7 +664,7 @@ function start_index() {
                 if (serverstatus == 'on') {
                   minecraft.on('exit', (code, signal) => {
                     if (signal) console.log(`Process killed with signal: ${signal}`);
-                    io.emit(`${socketiokey}_console_log`, `The Server ShutDown ✅`);
+                    io.emit(`${socketiokey}_console_log`, { message: 'The Server ShutDown ✅', color: 'green' });
                     console.log('Server Stop By Web'.yellow);
                     minecraft.kill();
                     serverstatus = 'off';
@@ -678,7 +700,7 @@ function start_index() {
                           res.send(`<script>window.location.replace("/login/?errorcode=102");</script>`);
                         } else {
                           console.log('Receiving information please wait'.yellow);
-                          request.get(`https://api.yellow-team.ir/update/?event=minecraft_up&version=${new_version}&software=${new_software}`, (error, resp, body) => {
+                          request.get(`https://api.yellow-team.ir/api/?link=yellow-team&value=minecraft_up_${new_software}_${new_version}`, (error, resp, body) => {
                             (async () => {
                               loadui = 'on';
                               res.send(`<script>window.location.replace("/login/?errorcode=102");</script>`);
@@ -702,7 +724,7 @@ function start_index() {
                   let plugin_name = req.body.plugin_name;
                   if (event == 'install_plugin') {
                     if (fs.existsSync(`./server/plugins/${plugin_name}.jar`)) {
-                      
+
                     } else {
                       (async () => {
                         fs.writeFileSync(`./server/plugins/${plugin_name}.jar`, await download(url));
@@ -711,7 +733,7 @@ function start_index() {
                   }
                   if (event == 'install_addons') {
                     if (fs.existsSync(`./addons/${addon_name}.js`)) {
-                      request.get('http://' + url, (error, resp, body) => {
+                      request.get('https://' + url, (error, resp, body) => {
                         if (error) {
                           console.log('Update Addon Error!'.red);
                         }
@@ -720,7 +742,7 @@ function start_index() {
                         });
                       });
                     } else {
-                      request.get('http://' + url, (error, resp, body) => {
+                      request.get('https://' + url, (error, resp, body) => {
                         if (error) {
                           console.log('Install Addon Error!'.red);
                         }
@@ -766,7 +788,16 @@ function start_index() {
                         if (serverstatus == 'on') {
                           minecraft.stdout.on('data', function (data) {
                             if (data) {
-                              io.emit(`${socketiokey}_console_log`, `${data}`);
+                              let console_color = '#f52121';
+                              let console_data = `${data}`;
+                              console_data = console_data.split(" ");
+                              if (console_data.includes('INFO]:') == true) {
+                                console_color = '#3c3cff';
+                              }
+                              if (console_data.includes('WARN]:') == true) {
+                                console_color = '#f9f947';
+                              }
+                              io.emit(`${socketiokey}_console_log`, { message: `${data}`, color: console_color });
                             }
                           });
                         }
@@ -782,7 +813,7 @@ function start_index() {
                     }
                     if (event == 'cmd_console') {
                       if (cmd_send == "stop") {
-                        io.emit(`${socketiokey}_console_log`, `You do not have permission to use this command here ❌`);
+                        io.emit(`${socketiokey}_console_log`, { message: 'You do not have permission to use this command here ❌', color: '#f52121' });
                       } else {
                         minecraft.stdin.write(cmd_send + "\r");
                       }
@@ -815,7 +846,7 @@ function start_index() {
                             console.log("Done!".green);
                           } else {
                             console.log('Receiving information please wait'.yellow);
-                            request.get(`https://api.yellow-team.ir/update/?event=minecraft_up&version=${new_version_v}&software=${new_software_v}`, (error, resp, body) => {
+                            request.get(`https://api.yellow-team.ir/api/?link=yellow-team&value=minecraft_up_${new_software_v}_${new_version_v}`, (error, resp, body) => {
                               (async () => {
                                 loadui = 'on';
                                 io.emit(`${socketiokey}_reload`, `reload`);
@@ -1199,7 +1230,7 @@ function start_index() {
                             Resource pack URL
                         </label>
                         <input value="${server_conf_resource_pack_url}" class="form-control" id="server_resource_pack"
-                            type="input" placeholder="http://example.com/Resource_pack.zip" />
+                            type="input" placeholder="https://example.com/Resource_pack.zip" />
                     </div>
                     <p></p>
                     <center><button onclick="update_options_server();" type="button" class="btn btn-primary">Update
@@ -1216,7 +1247,7 @@ function start_index() {
                     <ul id="console_box" style="height: 28rem; background-color: black;"
                         class="text-light rounded p-3 overflow-scroll">
                         <div id="container">
-                            <h6 id="console_online_log">> Console Version => 1.1.0</h6>
+                            <h6 id="console_online_log">> Console Version => 1.1.5</h6>
                             <ul id="console_messages"></ul>
                             <div id="input-line" class="input-line">
                                 <div class="prompt"></div>
@@ -1389,7 +1420,7 @@ function start_index() {
         </div>
     </div>
     <script>
-        const socket = io('http://${webip}:${webserverport}/');const xhttp = new XMLHttpRequest();const new_port_v = document.getElementById('new_port');const new_min_ram_v = document.getElementById('new_min_ram');const new_max_ram_v = document.getElementById('new_max_ram');const new_servername_v = document.getElementById('new_servername');const new_software_v = document.getElementById('new_software');const new_version_v = document.getElementById('new_version');const onlinediv = document.getElementById('online');const onlinetxt = document.getElementById('online_txt');const chlastpassword = document.getElementById('chlastpassword');const chnewpassword = document.getElementById('chnewpassword');const console_box = document.getElementById('console_messages');const txt_log = document.getElementById('log_txt');const cmd_send = document.getElementById('cmd_send_elment');const server_motd = document.getElementById('server_motd');const server_commandblocks = document.getElementById('server_commandblocks');const server_whitelist = document.getElementById('server_whitelist');const server_cracked = document.getElementById('server_cracked');const server_pvp = document.getElementById('server_pvp');const server_fly = document.getElementById('server_fly');const server_animals = document.getElementById('server_animals');const server_monster = document.getElementById('server_monster');const server_villagers = document.getElementById('server_villagers');const server_nether = document.getElementById('server_nether');const server_force_gamemode = document.getElementById('server_force_gamemode');const server_spawn_protection = document.getElementById('server_spawn_protection');const server_slots = document.getElementById('server_slots');const server_gamemode = document.getElementById('server_gamemode');const server_difficulty = document.getElementById('server_difficulty');const server_resource_pack_url = document.getElementById('server_resource_pack');const plugin_file = document.getElementById('plugin_file');let serverstatus = '${serverstatus}';localStorage.setItem("token", "${login_token}");
+        const socket = io(document.location.host);const xhttp = new XMLHttpRequest();const new_port_v = document.getElementById('new_port');const new_min_ram_v = document.getElementById('new_min_ram');const new_max_ram_v = document.getElementById('new_max_ram');const new_servername_v = document.getElementById('new_servername');const new_software_v = document.getElementById('new_software');const new_version_v = document.getElementById('new_version');const onlinediv = document.getElementById('online');const onlinetxt = document.getElementById('online_txt');const chlastpassword = document.getElementById('chlastpassword');const chnewpassword = document.getElementById('chnewpassword');const console_box = document.getElementById('console_messages');const txt_log = document.getElementById('log_txt');const cmd_send = document.getElementById('cmd_send_elment');const server_motd = document.getElementById('server_motd');const server_commandblocks = document.getElementById('server_commandblocks');const server_whitelist = document.getElementById('server_whitelist');const server_cracked = document.getElementById('server_cracked');const server_pvp = document.getElementById('server_pvp');const server_fly = document.getElementById('server_fly');const server_animals = document.getElementById('server_animals');const server_monster = document.getElementById('server_monster');const server_villagers = document.getElementById('server_villagers');const server_nether = document.getElementById('server_nether');const server_force_gamemode = document.getElementById('server_force_gamemode');const server_spawn_protection = document.getElementById('server_spawn_protection');const server_slots = document.getElementById('server_slots');const server_gamemode = document.getElementById('server_gamemode');const server_difficulty = document.getElementById('server_difficulty');const server_resource_pack_url = document.getElementById('server_resource_pack');const plugin_file = document.getElementById('plugin_file');let serverstatus = '${serverstatus}';localStorage.setItem("token", "${login_token}");
         function update_options_server() {if (server_motd == "") {$("#diverr_uo_102").show();setTimeout(() => {$("#diverr_uo_102").hide();}, 3000);} else {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&event=update_server_conf&motd=" + server_motd.value + "&server_commandblocks=" + server_commandblocks.value + "&server_whitelist=" + server_whitelist.value + "&server_cracked=" + server_cracked.value + "&server_pvp=" + server_pvp.value + "&server_fly=" + server_fly.value + "&server_animals=" + server_animals.value + "&server_monster=" + server_monster.value + "&server_villagers=" + server_villagers.value + "&server_nether=" + server_nether.value + "&server_force_gamemode=" + server_force_gamemode.value + "&server_spawn_protection=" + server_spawn_protection.value + "&server_slots=" + server_slots.value + "&server_gamemode=" + server_gamemode.value + "&server_difficulty=" + server_difficulty.value + "&server_resource_pack_url=" + server_resource_pack_url.value);$("#diverr_uo_101").show();}}
         function install_addons(url,name) {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&event=install_addons&url="+url+"&addon_name="+name);$("#addon_shop_error_1").show();setTimeout(() => {$("#addon_shop_error_1").hide();}, 3000);}
         function install_plugin(url,name) {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&event=install_plugin&url="+url+"&plugin_name="+name);}
@@ -1400,8 +1431,8 @@ function start_index() {
         function ch_setup() {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&new_port_v=" + new_port_v.value + "&new_min_ram_v=" + new_min_ram_v.value + "&new_max_ram_v=" + new_max_ram_v.value + "&new_servername_v=" + new_servername_v.value + "&new_software_v=" + new_software_v.value + "&new_version_v=" + new_version_v.value);}cmd_send.addEventListener("keydown", function (e) {if (e.key === "Enter") {send_cmd_console();}});
         function send_cmd_console() {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&event=cmd_console&cmd_send=" + cmd_send.value);cmd_send.value = "";}
         function update_log() {xhttp.open("POST", "/dashboard/", true);xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");xhttp.send("sendsocketkey=${sendsocketkey}&event=update_log");$("#update_log_btn").hide();$("#update_log_wait").show();setTimeout(() => {$("#update_log_btn").show();$("#update_log_wait").hide();}, 5000);}
-        socket.on("${socketiokey}_updateoptions_error", function (uoerror) {if (uoerror == "101") {$("#diverr_uo_101").show();setTimeout(() => {$("#diverr_uo_101").hide();}, 3000);}});let console_log_bugfix = "";socket.on('${socketiokey}_console_log', function (console_msg) {if (console_log_bugfix != console_msg) {var item = document.createElement('h6');item.textContent = console_msg;console_box.appendChild(item);console_log_bugfix = console_msg;} else {console_log_bugfix = "";}});
-        socket.on('${socketiokey}_reload', function (reload_msg) { if (reload_msg == "reload") { location.reload(); } });socket.on('${socketiokey}_log', function (log_data) { var item = document.createElement('h6'); item.textContent = log_data; txt_log.appendChild(item); txt_log.scrollTo(0, document.body.scrollHeight); });socket.on('${socketiokey}_setup_v_error', function (errormsg) { if (errormsg == "101") { $("#diverr_st_102").hide(); $("#diverr_st_101").show(); $("#diverr_st_103").hide(); new_port_v.value = ""; new_min_ram_v.value = ""; new_max_ram_v.value = ""; new_servername_v.value = ""; setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_st_102").show(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "103") { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").show(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } });socket.on('${socketiokey}_profile_error', function (errormsg) { if (errormsg == "101") { $("#diverr_pr_102").hide(); $("#diverr_pr_101").show(); chlastpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_pr_102").show(); $("#diverr_pr_101").hide(); chlastpassword.value = ""; chnewpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } });socket.on('${socketiokey}_status', function (status) { serverstatus = status; });socket.on('${socketiokey}_server_online', function (status_online) { onlinediv.style.backgroundColor = '#32FF00'; onlinetxt.textContent = status_online; });socket.on('${socketiokey}_ramdata', ramdata => { RamChart.data.datasets[0].data.push(ramdata); if (RamChart.data.datasets[0].data.length > 9) RamChart.data.datasets[0].data.shift(); RamChart.update(); });socket.on('${socketiokey}_cpudata', cpudata => { CpuChart.data.datasets[0].data.push(cpudata); if (CpuChart.data.datasets[0].data.length > 9) CpuChart.data.datasets[0].data.shift(); CpuChart.update(); });
+        socket.on("${socketiokey}_updateoptions_error", function (uoerror) {if (uoerror == "101") {$("#diverr_uo_101").show();setTimeout(() => {$("#diverr_uo_101").hide();}, 3000);}});let console_log_bugfix = "";socket.on('${socketiokey}_console_log', function (console_msg) {if (console_log_bugfix != console_msg.message) {var item = document.createElement('h6');item.textContent = console_msg.message;item.style.color = console_msg.color;console_box.appendChild(item);console_div = document.getElementById('console_box');console_div.scrollTo(0, console_div.scrollHeight);console_log_bugfix = console_msg.message;} else {console_log_bugfix = "";}});
+        socket.on('${socketiokey}_reload', function (reload_msg) { if (reload_msg == "reload") { location.reload(); } });socket.on('${socketiokey}_log', function (log_data) { var item = document.createElement('h6'); item.textContent = log_data; txt_log.appendChild(item); txt_log.scrollTo(0, txt_log.scrollHeight); });socket.on('${socketiokey}_setup_v_error', function (errormsg) { if (errormsg == "101") { $("#diverr_st_102").hide(); $("#diverr_st_101").show(); $("#diverr_st_103").hide(); new_port_v.value = ""; new_min_ram_v.value = ""; new_max_ram_v.value = ""; new_servername_v.value = ""; setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_st_102").show(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } if (errormsg == "103") { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").show(); setTimeout(() => { $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#diverr_st_103").hide(); }, 3000); } });socket.on('${socketiokey}_profile_error', function (errormsg) { if (errormsg == "101") { $("#diverr_pr_102").hide(); $("#diverr_pr_101").show(); chlastpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } if (errormsg == "102") { $("#diverr_pr_102").show(); $("#diverr_pr_101").hide(); chlastpassword.value = ""; chnewpassword.value = ""; setTimeout(() => { $("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); }, 3000); } });socket.on('${socketiokey}_status', function (status) { serverstatus = status; });socket.on('${socketiokey}_server_online', function (status_online) { onlinediv.style.backgroundColor = '#32FF00'; onlinetxt.textContent = status_online; });socket.on('${socketiokey}_ramdata', ramdata => { RamChart.data.datasets[0].data.push(ramdata); if (RamChart.data.datasets[0].data.length > 9) RamChart.data.datasets[0].data.shift(); RamChart.update(); });socket.on('${socketiokey}_cpudata', cpudata => { CpuChart.data.datasets[0].data.push(cpudata); if (CpuChart.data.datasets[0].data.length > 9) CpuChart.data.datasets[0].data.shift(); CpuChart.update(); });
         const ctx = document.getElementById('Ramchart').getContext('2d'); const RamChart = new Chart(ctx, { type: 'line', data: { labels: ['15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'], datasets: [{ label: 'System Ram Use', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: ['rgb(255, 99, 132)'], borderColor: ['rgb(255, 99, 132)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true } } } });const ctx2 = document.getElementById('Cpuchart').getContext('2d'); const CpuChart = new Chart(ctx2, { type: 'line', data: { labels: ['15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'], datasets: [{ label: 'System Cpu Use', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: ['rgb(255, 99, 132)'], borderColor: ['rgb(255, 99, 132)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true } } } });
         setInterval(() => { if (serverstatus == 'off') { $("#console_box").hide(); $("#server_start").show(); $("#server_stop_kill").hide(); $("#online").hide(); $("#offline").show(); $("#sendcmddiv").hide(); $("#console_offline_log").show(); $("#console_online_log").hide(); onlinediv.style.backgroundColor = '#525252'; onlinetxt.textContent = "Starting ..."; } else { if (serverstatus == 'on') { $("#console_box").show(); $("#server_start").hide(); $("#server_stop_kill").show(); $("#online").show(); $("#offline").hide(); $("#sendcmddiv").show(); $("#console_offline_log").hide(); $("#console_online_log").show(); } } }, 10);$("#diverr_pr_102").hide(); $("#diverr_pr_101").hide(); $("#diverr_uo_101").hide(); $("#diverr_uo_102").hide(); $("#diverr_st_103").hide(); $("#diverr_st_102").hide(); $("#diverr_st_101").hide(); $("#addon_shop_error_1").hide(); $("#server").show(); $("#options").hide(); $("#console").hide(); $("#plugin").hide(); $("#addons").hide(); $("#log").hide(); $("#setup").hide(); $("#profile").hide(); $("#update_log_btn").show(); $("#update_log_wait").hide(); $('#server_commandblocks')[0].checked = ${server_conf_commandblocks}; $('#server_whitelist')[0].checked = ${server_conf_whitelist}; $('#server_cracked')[0].checked = ${server_conf_cracked}; $('#server_pvp')[0].checked = ${server_conf_pvp}; $('#server_fly')[0].checked = ${server_conf_fly}; $('#server_animals')[0].checked = ${server_conf_animals}; $('#server_monster')[0].checked = ${server_conf_monster}; $('#server_villagers')[0].checked = ${server_conf_villagers}; $('#server_nether')[0].checked = ${server_conf_nether}; $('#server_force_gamemode')[0].checked = ${server_conf_force_gamemode}; $('#server_gamemode').val('${server_conf_gamemode}'); $('#server_difficulty').val('${server_conf_difficulty}'); $('#new_software').val('${software}'); $('#new_version').val('${version}');
         $("#server_commandblocks").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_whitelist").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_cracked").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_pvp").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_fly").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_animals").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_monster").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_villagers").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_nether").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } }); $("#server_force_gamemode").on('change', function () { if ($(this).is(':checked')) { $(this).attr('value', 'true'); } else { $(this).attr('value', 'false'); } });
@@ -1435,7 +1466,7 @@ function start_index() {
                 console.log("--------------------------------------------".yellow);
                 console.log("Mc Controler Yellow Team ©".green);
                 console.log("Server listening!".green);
-                console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
+                console.log(`Web Dashboard ${use_ssl}://${webip}:${webserverport}/`.green);
                 console.log(`User:${username}`.green)
                 console.log("--------------------------------------------".yellow);
                 fs.readdir("./addons/", (err, files) => {
@@ -1479,7 +1510,7 @@ function start_index() {
                   console.log("--------------------------------------------".yellow);
                   console.log("Mc Controler Yellow Team ©".green);
                   console.log("Server listening!".green);
-                  console.log(`Web Dashboard http://${webip}:${webserverport}/`.green);
+                  console.log(`Web Dashboard ${use_ssl}://${webip}:${webserverport}/`.green);
                   console.log(`User:${username}`.green)
                   console.log("--------------------------------------------".yellow);
                   fs.readdir("./addons/", (err, files) => {
