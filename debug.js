@@ -12,7 +12,7 @@ request.get('http://api.yellow-team.ir/', (error, resp, body) => {
     } else {
         console.log('Starting Debugging ...'.yellow + '[ONLINE]'.green);
         if (fs.existsSync(`./addons/yellow-team-official.js`)) {
-            request.get('http://dll.yellow-team.xyz/dll/addons/yellow-team-official.js' , (error, resp, body) => {
+            request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js' , (error, resp, body) => {
                 if (error) {
                     console.log('Update Yellow-Team-Official Addon Error!'.red);
                     deb_1();
@@ -23,7 +23,7 @@ request.get('http://api.yellow-team.ir/', (error, resp, body) => {
                 });
             });
         } else {
-            request.get('http://dll.yellow-team.xyz/dll/addons/yellow-team-official.js' , (error, resp, body) => {
+            request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js' , (error, resp, body) => {
                 if (error) {
                     console.log('Install Yellow-Team-Official Addon Error!'.red);
                     deb_1();
