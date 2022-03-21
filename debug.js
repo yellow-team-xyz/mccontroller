@@ -4,7 +4,7 @@ const download = require('download');
 const request = require('request');
 exports.debugdone = 0;
 console.log('Checking API ...'.yellow);
-request.get('http://api.yellow-team.ir/', (error, resp, body) => {
+request.get('http://api.yellow-team.ir/status/', (error, resp, body) => {
     if (body == undefined || body == '{"status":"off"}') {
         console.log("Can't connect to server".red);
         console.log("Working [Offline]".red);
