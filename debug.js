@@ -4,36 +4,45 @@ const download = require('download');
 const request = require('request');
 exports.debugdone = 0;
 console.log('Checking API ...'.yellow);
-request.get('http://api.yellow-team.ir/status/', (error, resp, body) => {
+request.get('http://api.yellow-team.ir/', (error, resp, body) => {
     if (body == undefined || body == '{"status":"off"}') {
         console.log("Can't connect to server".red);
         console.log("Working [Offline]".red);
         exports.debugdone = 1;
     } else {
-        console.log('Starting Debugging ...'.yellow + '[ONLINE]'.green);
-        if (fs.existsSync(`./addons/yellow-team-official.js`)) {
-            request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js' , (error, resp, body) => {
-                if (error) {
-                    console.log('Update Yellow-Team-Official Addon Error!'.red);
-                    deb_1();
+        console.log('Checking DLL ...'.yellow);
+        request.get('http://dll.yellow-team.ir/', (error, resp, body) => {
+            if (body == undefined || body == '{"status":"off"}') {
+                console.log("Can't connect to server".red);
+                console.log("Working [Offline]".red);
+                exports.debugdone = 1;
+            } else {
+                console.log('Starting Debugging ...'.yellow + '[ONLINE]'.green);
+                if (fs.existsSync(`./addons/yellow-team-official.js`)) {
+                    request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js', (error, resp, body) => {
+                        if (error) {
+                            console.log('Update Yellow-Team-Official Addon Error!'.red);
+                            deb_1();
+                        }
+                        fs.writeFile(`./addons/yellow-team-official.js`, body, 'utf-8', function (err, data) {
+                            console.log('Update Yellow-Team-Official Addon Done!'.green);
+                            deb_1();
+                        });
+                    });
+                } else {
+                    request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js', (error, resp, body) => {
+                        if (error) {
+                            console.log('Install Yellow-Team-Official Addon Error!'.red);
+                            deb_1();
+                        }
+                        fs.writeFile(`./addons/yellow-team-official.js`, body, 'utf-8', function (err, data) {
+                            console.log('Install Yellow-Team-Official Addon Done!'.green);
+                            deb_1();
+                        });
+                    });
                 }
-                fs.writeFile(`./addons/yellow-team-official.js`, body, 'utf-8', function (err, data) {
-                    console.log('Update Yellow-Team-Official Addon Done!'.green);
-                    deb_1();
-                });
-            });
-        } else {
-            request.get('http://dll.yellow-team.ir/dll/addons/yellow-team-official.js' , (error, resp, body) => {
-                if (error) {
-                    console.log('Install Yellow-Team-Official Addon Error!'.red);
-                    deb_1();
-                }
-                fs.writeFile(`./addons/yellow-team-official.js`, body, 'utf-8', function (err, data) {
-                    console.log('Install Yellow-Team-Official Addon Done!'.green);
-                    deb_1();
-                });
-            });
-        }
+            }
+        });
     }
 });
 function deb_1() {
