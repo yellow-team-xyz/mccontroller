@@ -16,6 +16,7 @@ const mcping = require('mcping-js');
 const download = require('download');
 const expressip = require('express-ip');
 const debug = require('./debug.js');
+const { status } = require('express/lib/response');
 app.use(expressip().getIpInfoMiddleware);
 app.use('/static', express.static('static'));
 app.use('/static/server-icon.png', express.static('./server/server-icon.png'));
@@ -307,9 +308,11 @@ function start_index() {
                 if (serverstatus == 'on') {
                   pidusage(minecraft.pid, function (err, stats) {
                     if (serverstatus == 'on') {
-                      memoryuseserver = stats.memory / 1000000;
-                      socket.emit(`${socketiokey}_cpudata`, `${stats.cpu}`);
-                      socket.emit(`${socketiokey}_ramdata`, `${memoryuseserver}`);
+                      if (!err) {
+                        memoryuseserver = stats.memory / 1000000;
+                        socket.emit(`${socketiokey}_cpudata`, `${stats.cpu}`);
+                        socket.emit(`${socketiokey}_ramdata`, `${memoryuseserver}`);
+                      }
                     }
                   });
                 }
@@ -1457,6 +1460,105 @@ function start_index() {
                         }, 10000);
                       }
                     }
+                  }
+                }
+              }
+            });
+            app.get('/api/', function (req, res) {
+              if (blacklist_ip.includes(`${req.ipInfo.ip}`) == true) {
+                res.send(`<html lang="en">
+            <head>
+            <meta charset="utf-8">
+            <title>Error 403</title>
+            <link rel="icon" href="../static/img/logo.png">
+            <link href="../static/css/error.css" rel="stylesheet">
+            </head>
+            <body>
+            <div id="notfound">
+            <div class="notfound">
+            <div class="notfound-404">
+              <h1>403</h1>
+            </div>
+            <h2>Access denied ${req.ipInfo.ip}</h2>
+            <p>Your IP is blocked! If you enter the wrong password or username, you will be allowed to enter after 10 seconds!</p>
+            </div>
+            </div>
+            </body>
+            </html>`);
+              } else {
+                const params = url.parse(req.url, true).query;
+                let api_username = params.username;
+                let api_password = params.password;
+                if (setup == 1 && api_username == username && api_password == password && loadui == "off") {
+                  let api_event = params.event;
+                  if (api_event == 'status' || api_event == 'console' || api_event == 'start' || api_event == 'stop' || api_event == 'kill') {
+                    if (api_event == 'status') {
+                      if (serverstatus == 'on') {
+                        pidusage(minecraft.pid, function (err, stats) {
+                          if (serverstatus == 'on') {
+                            if (!err) {
+                              memoryuseserver = stats.memory / 1000000;
+                              res.send(`{"serverstatus":"${serverstatus}","servername":"${servername}","version":"${version}","software":"${software}","min_ram":"${min_ram}","max_ram":"${max_ram}","serverport":"${serverport}","memoryuse":"${memoryuseserver}","cpuuse":"${stats.cpu}"}`);
+                            }
+                          }
+                        });
+                      } else {
+                        res.send(`{"serverstatus":"${serverstatus}","servername":"${servername}","version":"${version}","software":"${software}","min_ram":"${min_ram}","max_ram":"${max_ram}","serverport":"${serverport}"}`);
+                      }
+                    }
+                    if (api_event == 'console') {
+                      let console_cmd = params.cmd;
+                      if (serverstatus == 'on') {
+                        if (console_cmd != 'stop') {
+                          minecraft.stdin.write(console_cmd + "\r");
+                          res.send(`{"message":"done","console_cmd":"${console_cmd}"}`);
+                        } else {
+                          res.send(`{"message":"You do not have permission to use this command here || error"}`);
+                        }
+                      } else {
+                        res.send(`{"message":"server offline || error"}`);
+                      }
+                    }
+                    if (api_event == 'start') {
+                      if (serverstatus == 'off') {
+                        minecraft_server();
+                        res.send(`{"message":"done"}`);
+                      } else {
+                        res.send(`{"message":"server online || error"}`);
+                      }
+                    }
+                    if (api_event == 'stop') {
+                      if (serverstatus == 'on') {
+                        minecraft.stdin.write("stop" + "\r");
+                        serverstatus = 'off';
+                        res.send(`{"message":"done"}`);
+                      } else {
+                        res.send(`{"message":"server offline || error"}`);
+                      }
+                    }
+                    if (api_event == 'kill') {
+                      if (serverstatus == 'on') {
+                        console.log('Server Stop By Web'.yellow);
+                        minecraft.kill();
+                        serverstatus = 'off';
+                        res.send(`{"message":"done"}`);
+                      } else {
+                        res.send(`{"message":"server offline || error"}`);
+                      }
+                    }
+                  } else {
+                    res.send(`{"message":"event || error"}`);
+                  }
+                } else {
+                  if (setup == 1 && loadui == "off") {
+                    res.send(`{"message":"login || error"}`);
+                    fs.appendFile('./data/blacklist_ip.ydb', `\n${req.ipInfo.ip}`, function () { });
+                    setTimeout(() => {
+                      fs.readFile('./data/blacklist_ip.ydb', 'utf8', function (err, data) {
+                        let new_data = data.replace(`\n${req.ipInfo.ip}`, '');
+                        fs.writeFileSync('./data/blacklist_ip.ydb', `${new_data}`);
+                      });
+                    }, 10000);
                   }
                 }
               }
