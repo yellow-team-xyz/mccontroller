@@ -653,7 +653,7 @@ function start_index() {
             </body>
             </html>`);
                 } else {
-                  res.send(`<script>window.location.replace("/login/?errorcode=101");</script>`);
+                  res.send('<script>const token = localStorage.getItem("token");document.write(`<form id="sendform" action="/dashboard/" method="post"><input type="hidden" value="${token}" name="token_login"></form>`);document.getElementById("sendform").submit();</script>');
                 }
               });
               app.post('/dashboard/', function (req, res) {
@@ -750,7 +750,7 @@ function start_index() {
                         })();
                       }
                     }
-                    if(event=='download_plugin'){
+                    if (event == 'download_plugin') {
                       if (fs.existsSync(`./server/plugins/${plugin_name}.jar`)) {
                         io.emit(`${socketiokey}_plugins_error`, '102');
                       } else {
@@ -1624,36 +1624,44 @@ function start_index() {
                   console_log('--------------------------------------------', 1, 2);
                   fs.readdir("./addons/", (err, files) => {
                     files.forEach(file => {
-                      const eventHandler = require(`./addons/${file}`);
-                      const pluginname = file.split(".")[0];
-                      console_log(`Loading Addon: [${pluginname}]`, 1, 2);
-                      if (eventHandler.login_head == undefined) { } else {
-                        login_head = `${login_head}` + eventHandler.login_head;
-                      }
-                      if (eventHandler.login_main == undefined) { } else {
-                        login_main = `${login_main}` + eventHandler.login_main;
-                      }
-                      if (eventHandler.login_script == undefined) { } else {
-                        login_script = `${login_script}` + eventHandler.login_script;
-                      }
-                      if (eventHandler.dash_head == undefined) { } else {
-                        dash_head = `${dash_head}` + eventHandler.dash_head;
-                      }
-                      if (eventHandler.dash_main == undefined) { } else {
-                        dash_main = `${dash_main} <p> </p>` + eventHandler.dash_main;
-                      }
-                      if (eventHandler.dash_nav == undefined) { } else {
-                        dash_nav = `${dash_nav}` + eventHandler.dash_nav;
-                      }
-                      if (eventHandler.dash_nav_side == undefined) { } else {
-                        dash_nav_side = `${dash_nav_side}` + eventHandler.dash_nav_side;
-                      }
-                      if (eventHandler.dash_script == undefined) { } else {
-                        dash_script = `${dash_script}` + eventHandler.dash_script;
-                      }
-                      if (eventHandler.home_html == undefined) { } else {
-                        home_html = `${home_html}` + eventHandler.home_html;
-                      }
+                      fs.readFile(`./addons/${file}`, 'utf8', function (err, data) {
+                        data = data.split("//Disable");
+                        if (data.length == 1) {
+                          const eventHandler = require(`./addons/${file}`);
+                          const pluginname = file.split(".")[0];
+                          console_log(`Loading Addon: [${pluginname}]`, 1, 2);
+                          if (eventHandler.login_head == undefined) { } else {
+                            login_head = `${login_head}` + eventHandler.login_head;
+                          }
+                          if (eventHandler.login_main == undefined) { } else {
+                            login_main = `${login_main}` + eventHandler.login_main;
+                          }
+                          if (eventHandler.login_script == undefined) { } else {
+                            login_script = `${login_script}` + eventHandler.login_script;
+                          }
+                          if (eventHandler.dash_head == undefined) { } else {
+                            dash_head = `${dash_head}` + eventHandler.dash_head;
+                          }
+                          if (eventHandler.dash_main == undefined) { } else {
+                            dash_main = `${dash_main} <p> </p>` + eventHandler.dash_main;
+                          }
+                          if (eventHandler.dash_nav == undefined) { } else {
+                            dash_nav = `${dash_nav}` + eventHandler.dash_nav;
+                          }
+                          if (eventHandler.dash_nav_side == undefined) { } else {
+                            dash_nav_side = `${dash_nav_side}` + eventHandler.dash_nav_side;
+                          }
+                          if (eventHandler.dash_script == undefined) { } else {
+                            dash_script = `${dash_script}` + eventHandler.dash_script;
+                          }
+                          if (eventHandler.home_html == undefined) { } else {
+                            home_html = `${home_html}` + eventHandler.home_html;
+                          }
+                        } else {
+                          const pluginname = file.split(".")[0];
+                          console_log(`Loading Addon: [${pluginname}] [Disable]`, 1, 3);
+                        }
+                      });
                     });
                   });
                 });
@@ -1668,36 +1676,44 @@ function start_index() {
                     console_log('--------------------------------------------', 1, 2);
                     fs.readdir("./addons/", (err, files) => {
                       files.forEach(file => {
-                        const eventHandler = require(`./addons/${file}`);
-                        const pluginname = file.split(".")[0];
-                        console_log(`Loading Addon: [${pluginname}]`, 1, 2);
-                        if (eventHandler.login_head == undefined) { } else {
-                          login_head = `${login_head}` + eventHandler.login_head;
-                        }
-                        if (eventHandler.login_main == undefined) { } else {
-                          login_main = `${login_main}` + eventHandler.login_main;
-                        }
-                        if (eventHandler.login_script == undefined) { } else {
-                          login_script = `${login_script}` + eventHandler.login_script;
-                        }
-                        if (eventHandler.dash_head == undefined) { } else {
-                          dash_head = `${dash_head}` + eventHandler.dash_head;
-                        }
-                        if (eventHandler.dash_main == undefined) { } else {
-                          dash_main = `${dash_main} <p> </p>` + eventHandler.dash_main;
-                        }
-                        if (eventHandler.dash_nav == undefined) { } else {
-                          dash_nav = `${dash_nav}` + eventHandler.dash_nav;
-                        }
-                        if (eventHandler.dash_nav_side == undefined) { } else {
-                          dash_nav_side = `${dash_nav_side}` + eventHandler.dash_nav_side;
-                        }
-                        if (eventHandler.dash_script == undefined) { } else {
-                          dash_script = `${dash_script}` + eventHandler.dash_script;
-                        }
-                        if (eventHandler.home_html == undefined) { } else {
-                          home_html = `${home_html}` + eventHandler.home_html;
-                        }
+                        fs.readFile(`./addons/${file}`, 'utf8', function (err, data) {
+                          data = data.split("//Disable");
+                          if (data.length == 1) {
+                            const eventHandler = require(`./addons/${file}`);
+                            const pluginname = file.split(".")[0];
+                            console_log(`Loading Addon: [${pluginname}]`, 1, 2);
+                            if (eventHandler.login_head == undefined) { } else {
+                              login_head = `${login_head}` + eventHandler.login_head;
+                            }
+                            if (eventHandler.login_main == undefined) { } else {
+                              login_main = `${login_main}` + eventHandler.login_main;
+                            }
+                            if (eventHandler.login_script == undefined) { } else {
+                              login_script = `${login_script}` + eventHandler.login_script;
+                            }
+                            if (eventHandler.dash_head == undefined) { } else {
+                              dash_head = `${dash_head}` + eventHandler.dash_head;
+                            }
+                            if (eventHandler.dash_main == undefined) { } else {
+                              dash_main = `${dash_main} <p> </p>` + eventHandler.dash_main;
+                            }
+                            if (eventHandler.dash_nav == undefined) { } else {
+                              dash_nav = `${dash_nav}` + eventHandler.dash_nav;
+                            }
+                            if (eventHandler.dash_nav_side == undefined) { } else {
+                              dash_nav_side = `${dash_nav_side}` + eventHandler.dash_nav_side;
+                            }
+                            if (eventHandler.dash_script == undefined) { } else {
+                              dash_script = `${dash_script}` + eventHandler.dash_script;
+                            }
+                            if (eventHandler.home_html == undefined) { } else {
+                              home_html = `${home_html}` + eventHandler.home_html;
+                            }
+                          } else {
+                            const pluginname = file.split(".")[0];
+                            console_log(`Loading Addon: [${pluginname}] [Disable]`, 1, 3);
+                          }
+                        });
                       });
                     });
                   });
