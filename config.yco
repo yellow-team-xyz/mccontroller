@@ -1,8 +1,7 @@
 {
-    "webip":"localhost",
+    "webserver_ip":"localhost",
+    "webserver_port":"3000",
     "multipleips":"false",
-    "serverip":"localhost",
-    "webserverport":"3000",
-    "private_api":"false",
+    "server_ip":"localhost",
     "get_official_addon":"true"
 }
