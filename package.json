@@ -1,26 +1,30 @@
 {
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.0",
     "child_process": "^1.0.2",
     "colors": "^1.4.0",
     "download": "^8.0.0",
-    "express": "^4.17.1",
+    "express": "^4.18.1",
     "express-ip": "^1.0.4",
     "fs": "^0.0.1-security",
     "line-reader": "^0.4.0",
     "mcping-js": "^1.5.0",
+    "multer": "^1.4.4",
     "pidusage": "^3.0.0",
     "request": "^2.88.2",
-    "socket.io": "^4.4.0",
+    "socket.io": "^4.5.0",
     "url": "^0.11.0"
   },
-  "name": "mccontroller-1.67b",
-  "version": "1.67.0",
+  "name": "mccontroller",
+  "version": "1.80.0",
   "description": "Free Web Minecraft Hosting!",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ."
   },
   "author": "Yellow Team ©",
-  "license": "ISC"
+  "license": "GPL-3.0"
 }
