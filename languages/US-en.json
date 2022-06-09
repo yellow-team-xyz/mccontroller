@@ -1,0 +1,166 @@
+{
+    "mccontroller_name":"McController",
+    "copyright":{
+        "title":"Power By Yellow Team",
+        "color":"#ffbf00"
+    },
+    "404_page":{
+        "error_title":"Not Found!",
+        "error_sub_title":"Error 404 : Looks like this Page doesn't exist!",
+        "error_home_page_button":"Home Page"
+    },
+    "403_page":{
+        "error_title":"Access denied!",
+        "error_sub_title":"Error 403 : Your IP is blocked!<br/>If you enter the wrong password or username, you will be allowed to enter after 10 seconds!",
+        "error_reload_page_button":"Reload Page"
+    },
+    "error_message":{
+        "101":"Wrong Username or Password",
+        "103":"Logout Done"
+    },
+    "login_page":{
+        "login_title":"Login",
+        "login_input_username":"Username",
+        "login_input_password":"Password",
+        "remember_checkbox_password":"Remember password",
+        "login_button":"Login"
+    },
+    "nav_side":{
+        "server":"Server",
+        "options":"Options",
+        "console":"Console",
+        "log":"Log",
+        "plugins":"Plugins",
+        "general_settings":"General Settings",
+        "addons":"Addons",
+        "profile":"Profile",
+        "access":"Access",
+        "logout":"Logout"
+    },
+    "access_level_permission":{
+        "server":"Server",
+        "options":"Options",
+        "console":"Console",
+        "log":"Log",
+        "plugins":"Plugins",
+        "general_settings":"General Settings",
+        "addons":"Addons",
+        "profile":"Profile",
+        "administrator":"Administrator"
+    },
+    "dashboard":"Dashboard",
+    "server_page":{
+        "server":"Server",
+        "offline":"Offile",
+        "starting":"Starting ...",
+        "online":"Online",
+        "start_button":"Start",
+        "stop_button":"Stop",
+        "kill_button":"Kill",
+        "ram_use":"Ram Use",
+        "cpu_use":"Cpu Use",
+        "system_ram_use":"System Ram Use",
+        "system_cpu_use":"System Cpu Use",
+        "waiting_process":"This will take some time, please be patient",
+        "kill_alert":"If you use this option, the server will not be saved and it is possible to jump to your server information."
+    },
+    "options_page":{
+        "server_properties":"Server.properties",
+        "spawn_protection":"Spawn Protection",
+        "slots":"Slots",
+        "gamemode":"Gamemode",
+        "gamemode_survival":"Survival",
+        "gamemode_creative":"Creative",
+        "gamemode_adventure":"Adventure",
+        "gamemode_spectator":"Spectator",
+        "difficulty":"Difficulty",
+        "difficulty_easy":"Easy",
+        "difficulty_peaceful":"Peaceful",
+        "difficulty_normal":"Normal",
+        "difficulty_hard":"Hard",
+        "whitelist":"Whitelist",
+        "cracked":"Cracked",
+        "pvp":"PVP",
+        "commandblocks":"CommandBlocks",
+        "fly":"Fly",
+        "animals":"Animals",
+        "monster":"Monster",
+        "villagers":"Villagers",
+        "nether":"Nether",
+        "force_gamemode":"Force Gamemode",
+        "resource_pack_url":"Resource pack URL",
+        "update_options_button":"Update Options",
+        "alert_success":"Successfully!",
+        "alert_danger":"Error!"
+    },
+    "console_page":{
+        "console":"Console",
+        "offline_console":"Offline",
+        "console_version_message":"> Console Version => 1.1.5"
+    },
+    "log_page":{
+        "log":"Log",
+        "loading_message":"Loading Information Please Wait...",
+        "update_log_button":"Update Log",
+        "waiting_alert":"Please wait 5 seconds for the next update"
+    },
+    "plugins_page":{
+        "plugins":"Plugins",
+        "success_alert":"Downloading Successfully!",
+        "danger_alert":"Error!",
+        "upload_plugin":"Upload Plugin",
+        "upload_plugin_button":"Upload Plugin",
+        "file_is_uploading":"File is uploading...",
+        "file_upload_done":"File is uploaded successfully!",
+        "file_upload_error":"Error uploading file."
+    },
+    "general_settings_page":{
+        "setup":"Setup",
+        "error_101":"Setup Changed Successfully!",
+        "error_102":"Requests are not complete!",
+        "error_103":"ServerPort value are not allowed",
+        "server_port":"Server Port",
+        "min_ram_use":"Min Ram Use (G)",
+        "max_ram_use":"Max Ram Use (G)",
+        "server_name":"Server Name",
+        "minecraft_server_software":"Minecraft Server Software",
+        "minecraft_server_version":"Minecraft Server Version",
+        "languages":"Languages",
+        "update_setup_button":"Update Setup",
+        "restart_addons_button":"Restart Addons",
+        "restart_addons_alert":"Do you have complete confidence to do this?"
+    },
+    "addons_page":{
+        "addons":"Addons",
+        "alert_success":"Successfully Update OR Install!"
+    },
+    "profile_page":{
+        "prfile":"Profile",
+        "username":"Username",
+        "password":"Password",
+        "change_password":"Change Password",
+        "last_password":"Last Password",
+        "new_password":"New Password",
+        "change_password_button":"Change Password",
+        "success_alert":"Password Changed Successfully!",
+        "danger_alert":"The Last Password Entered Is Incorrect."
+    },
+    "access_page":{
+        "access":"Access",
+        "alert_success_add":"Successfully!",
+        "alert_danger_add":"The Username Exist!",
+        "add_access":"Add Access",
+        "add_username":"Username",
+        "add_password":"Password",
+        "access_level_permission":"Access Level Permission",
+        "add_access_button":"Add Access",
+        "username_table":"Username",
+        "level_permission_table":"Level Permission",
+        "alert_success_remove":"Successfully!",
+        "alert_danger_remove":"The Username Does Not Exist!",
+        "remove_access":"Remove Access",
+        "remove_access_sub":"Remove Access",
+        "remove_access_username":"Username",
+        "remove_access_button":"Remove Access"
+    }
+}

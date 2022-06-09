@@ -1,0 +1,144 @@
+[17:54:28] [Server thread/INFO]: Starting minecraft server version 1.12.2
+[17:54:28] [Server thread/INFO]: Loading properties
+[17:54:28] [Server thread/WARN]: resource-pack-hash is deprecated and found along side resource-pack-sha1. resource-pack-hash will be ignored.
+[17:54:28] [Server thread/INFO]: Default game type: SURVIVAL
+[17:54:28] [Server thread/INFO]: This server is running CraftBukkit version git-Spigot-79a30d7-f4830a1 (MC: 1.12.2) (Implementing API version 1.12.2-R0.1-SNAPSHOT)
+[17:54:33] [Server thread/INFO]: Starting minecraft server version 1.12.2
+[17:54:33] [Server thread/INFO]: Loading properties
+[17:54:33] [Server thread/WARN]: resource-pack-hash is deprecated and found along side resource-pack-sha1. resource-pack-hash will be ignored.
+[17:54:33] [Server thread/INFO]: Default game type: SURVIVAL
+[17:54:33] [Server thread/INFO]: This server is runn[17:54:34] [Server thread/INFO]: Set PluginClassLoader as parallel capable
+[17:54:34] [Server thread/INFO]: [Cle[17:54:34] [Server thread/INFO]: Debug logging is disabled
+[17:54:34] [Server thread/INFO]: Server Ping Player Sample Count: 12
+
+[17:54:34] [Server thread/INFO]: Using 4 threads for Netty b[17:54:34] [Server thread/INFO]: [dynmap] Mod Support API avai[17:54:39] [Server thread/INFO]: Starting Minecraft server on *:25565
+[17:54:39] [Server thread/INFO]: Using default channel type
+[17:54:41] [Server thread/WARN]: **** FAILED TO BIND TO PORT!
+[17:54:41] [Server thread/WARN]: The exception was: java.net.BindException: Address already in use: bind
+[17:54:41] [Server thread/WARN]: Perhaps a server is already running on that port?
+[17:54:41] [Server thread/INFO]: Stopping server
+[17:54:41] [Server thread/INFO]: Saving players
+
+[17:54:34] [Server thread/INFO]: **** Beginning UUID conversion, this may take A LONG time ****
+[17:54:34] [Server thread/INFO]: Preparing level "world"
+[17:54:34] [Server thread/INFO]: -------- World Settings For [world] --------
+[17:54:34] [Server thread/INFO]: Item Merge Radius: 2.5
+[17:54:34] [Server thread/INFO]: Item Despawn Rate: 6000
+[17:54:34] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[17:54:34] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[17:54:34] [Server thread/INFO]: Mob Spawn Range: 4
+[17:54:34] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Cane Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Melon Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Vine Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Cocoa Growth Modifier: 100%
+[17:54:34] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16 / Tiv true
+[17:54:34] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[17:54:34] [Server thread/INFO]: Structure Info Saving: true
+[17:54:34] [Server thread/INFO]: Random Lighting Updates: false
+[17:54:34] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617 Monument: 10387313 Slime: 987234911
+[17:54:34] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 1 Hopper Amount: 1
+[17:54:34] [Server thread/INFO]: Max TNT Explosions: 100
+[17:54:34] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[17:54:34] [Server thread/INFO]: Experience Merge Radius: 3.0
+[17:54:34] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[17:54:34] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[17:54:34] [Server thread/INFO]: View Distance: 10
+[17:54:36] [Server thread/INFO]: -------- World Settings For [world_nether] --------
+[17:54:36] [Server thread/INFO]: Item Merge Radius: 2.5
+[17:54:36] [Server thread/INFO]: Item Despawn Rate: 6000
+[17:54:36] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[17:54:36] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[17:54:36] [Server thread/INFO]: Mob Spawn Range: 4
+[17:54:36] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Cane Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Melon Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Vine Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Cocoa Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16 / Tiv true
+[17:54:36] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[17:54:36] [Server thread/INFO]: Structure Info Saving: true
+[17:54:36] [Server thread/INFO]: Random Lighting Updates: false
+[17:54:36] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617 Monument: 10387313 Slime: 987234911
+[17:54:36] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 1 Hopper Amount: 1
+[17:54:36] [Server thread/INFO]: Max TNT Explosions: 100
+[17:54:36] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[17:54:36] [Server thread/INFO]: Experience Merge Radius: 3.0
+[17:54:36] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[17:54:36] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[17:54:36] [Server thread/INFO]: View Distance: 10
+[17:54:36] [Server thread/INFO]: -------- World Settings For [world_the_end] --------
+[17:54:36] [Server thread/INFO]: Item Merge Radius: 2.5
+[17:54:36] [Server thread/INFO]: Item Despawn Rate: 6000
+[17:54:36] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[17:54:36] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[17:54:36] [Server thread/INFO]: Mob Spawn Range: 4
+[17:54:36] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Cane Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Melon Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Vine Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Cocoa Growth Modifier: 100%
+[17:54:36] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16 / Tiv true
+[17:54:36] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[17:54:36] [Server thread/INFO]: Structure Info Saving: true
+[17:54:36] [Server thread/INFO]: Random Lighting Updates: false
+[17:54:36] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617 Monument: 10387313 Slime: 987234911
+[17:54:36] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 1 Hopper Amount: 1
+[17:54:36] [Server thread/INFO]: Max TNT Explosions: 100
+[17:54:36] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[17:54:36] [Server thread/INFO]: Experience Merge Radius: 3.0
+[17:54:36] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[17:54:36] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[17:54:36] [Server thread/INFO]: View Distance: 10
+[17:54:36] [Server thread/INFO]: Preparing start region for level 0 (Seed: 2181658982646754995)
+[17:54:37] [Server thread/INFO]: Preparing spawn area: 3%
+[17:54:38] [Server thread/INFO]: Preparing spawn area: 31%
+[17:54:40] [Server thread/INFO]: Preparing spawn area: 60%
+[17:54:41] [Server thread/INFO]: Preparing spawn area: 80%
+[17:54:41] [Server thread/INFO]: Preparing start region for level 1 (Seed: 2181658982646754995)
+[17:54:42] [Server thread/INFO]: Preparing spawn area: 43%
+[17:54:43] [Server thread/INFO]: Preparing start region for level 2 (Seed: 2181658982646754995)
+[17:54:43] [Server thread/INFO]: [ClearLag] Enabling ClearLag v3.2.2
+[17:54:43] [Server thread/INFO]: [ClearLag] Using version-adapter: LegacyVersionAdapter
+[17:54:44] [Server thread/INFO]: [ClearLag] Loading modules...
+[17:54:44] [Server thread/INFO]: [ClearLag] Modules enabed, loading config values
+[17:54:44] [Server thread/INFO]: [ClearLag] Modules have been loaded!
+[17:54:44] [Server thread/INFO]: [ClearLag] Clearlag is now enabled!
+[17:54:44] [Server thread/INFO]: [dynmap] Enabling dynmap v3.3.1-683
+[17:54:44] [Thread-5/INFO]: [ClearLag] Checking for updates compatible with your bukkit version [1.12]...
+[17:54:44] [Server thread/INFO]: [dynmap] Using Bukkit Permissions (superperms) for access control
+[17:54:44] [Server thread/INFO]: [dynmap] Web interface permissions only available for online users
+[17:54:45] [Server thread/INFO]: [dynmap] Mod Support processing completed
+[17:54:50] [Server thread/INFO]: [dynmap] Loaded 27 shaders.
+[17:54:50] [Server thread/INFO]: [dynmap] Loaded 82 perspectives.
+[17:54:50] [Server thread/INFO]: [dynmap] Loaded 22 lightings.
+[17:54:50] [Server thread/INFO]: [dynmap] Starting enter/exit processing
+[17:54:51] [Server thread/INFO]: [dynmap] Web server started on address 0.0.0.0:8123
+[17:54:51] [Server thread/INFO]: [dynmap] version 3.3.1-683 is enabled - core version 3.3.1-683
+[17:54:51] [Server thread/INFO]: [dynmap] For support, visit our Discord at https://discord.gg/s3rd5qn
+[17:54:51] [Server thread/INFO]: [dynmap] For news, visit https://reddit.com/r/Dynmap or follow https://twitter.com/Dynmap
+[17:54:51] [Server thread/INFO]: [dynmap] To report or track bugs, visit https://github.com/webbukkit/dynmap/issues
+[17:54:51] [Server thread/INFO]: [dynmap] If you'd like to donate, please visit https://www.patreon.com/dynmap or https://ko-fi.com/michaelprimm
+[17:54:51] [Server thread/INFO]: [dynmap] Loaded 3 maps of world 'world'.
+[17:54:51] [Server thread/INFO]: [dynmap] Loaded 2 maps of world 'world_nether'.
+[17:54:51] [Server thread/INFO]: [dynmap] Loaded 2 maps of world 'world_the_end'.
+[17:54:51] [Server thread/INFO]: [dynmap] Enabled
+[17:54:51] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[17:54:51] [Dynmap Render Thread/INFO]: [dynmap] Finish marker initialization
+[17:54:51] [Server thread/INFO]: Done (17.158s)! For help, type "help" or "?"
+[17:54:53] [Thread-5/INFO]: [ClearLag] No updates found!
