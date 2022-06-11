@@ -22,4 +22,4 @@ And now you can run MCController with this command:
 $ node .
 ```
 <br>
-Use it and enjoy.
+Use it and enjoy. [Visit Website](https://mccontroller.yellow-team.ir/)
