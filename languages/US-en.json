@@ -14,6 +14,10 @@
         "error_sub_title":"Error 403 : Your IP is blocked!<br/>If you enter the wrong password or username, you will be allowed to enter after 10 seconds!",
         "error_reload_page_button":"Reload Page"
     },
+    "socket_disconnect_page":{
+        "socket_disconnect":"Socket Disconnect",
+        "reload_for_reconnect_button":"Reload For Reconnect"
+    },
     "error_message":{
         "101":"Wrong Username or Password",
         "103":"Logout Done"
@@ -56,13 +60,12 @@
         "online":"Online",
         "start_button":"Start",
         "stop_button":"Stop",
-        "kill_button":"Kill",
-        "ram_use":"Ram Use",
-        "cpu_use":"Cpu Use",
+        "system_usage":"System Usage",
+        "server_info":"Server Info",
         "system_ram_use":"System Ram Use",
         "system_cpu_use":"System Cpu Use",
-        "waiting_process":"This will take some time, please be patient",
-        "kill_alert":"If you use this option, the server will not be saved and it is possible to jump to your server information."
+        "online_player":"Online Player",
+        "waiting_process":"This will take some time, please be patient"
     },
     "options_page":{
         "server_properties":"Server.properties",
@@ -96,23 +99,50 @@
     "console_page":{
         "console":"Console",
         "offline_console":"Offline",
-        "console_version_message":"> Console Version => 1.1.5"
+        "console_version_message":"> Console Version => 1.1.5",
+        "console_permission_didnt":"You do not have permission to use this command here ❌"
     },
     "log_page":{
         "log":"Log",
-        "loading_message":"Loading Information Please Wait...",
-        "update_log_button":"Update Log",
-        "waiting_alert":"Please wait 5 seconds for the next update"
+        "logs":"Logs",
+        "log_preview_message":"To preview Logs, please select a Log",
+        "refresh_list_button":"Refresh List",
+        "name_list":"Name",
+        "actions_list":"Actions",
+        "download_button":"Download",
+        "delete_button":"Delete",
+        "select_button":"Select",
+        "delete_confirm_message":"Are you sure you want to do this. It is irreversible",
+        "delete_success_message":"Successfully completed",
+        "delete_error_message":"Unknown error"
     },
     "plugins_page":{
         "plugins":"Plugins",
-        "success_alert":"Downloading Successfully!",
-        "danger_alert":"Error!",
         "upload_plugin":"Upload Plugin",
         "upload_plugin_button":"Upload Plugin",
         "file_is_uploading":"File is uploading...",
         "file_upload_done":"File is uploaded successfully!",
-        "file_upload_error":"Error uploading file."
+        "file_upload_error":"Error uploading file.",
+        "name_list":"Name",
+        "actions_list":"Actions",
+        "open_button":"Open",
+        "delete_button":"Delete",
+        "go_back_button":"Go Back",
+        "save_file_button":"Save File",
+        "fm_error_1":"This path does not exist",
+        "fm_error_2":"This Folder is Empty",
+        "fm_error_3":"There was a problem reading the file",
+        "fm_error_4":"This file is unknown and the fable is not open",
+        "fm_error_5":"This path does not exist",
+        "fm_error_6":"An error occurred while saving the file",
+        "fm_error_7":"File saved successfully!",
+        "fm_error_8":"The file does not exist or has been deleted",
+        "fm_error_9":"There is a file with this name",
+        "fm_error_10":"We encountered an unknown error",
+        "fm_error_11":"File created successfully!",
+        "fm_error_12":"The file name Undefined",
+        "fm_error_13":"Unknown error",
+        "fm_error_14":"Successfully completed"
     },
     "general_settings_page":{
         "setup":"Setup",
@@ -126,15 +156,37 @@
         "minecraft_server_software":"Minecraft Server Software",
         "minecraft_server_version":"Minecraft Server Version",
         "languages":"Languages",
-        "update_setup_button":"Update Setup",
-        "restart_addons_button":"Restart Addons",
-        "restart_addons_alert":"Do you have complete confidence to do this?"
+        "update_setup_button":"Update Setup"
     },
     "addons_page":{
         "addons":"Addons",
-        "alert_success":"Successfully Update OR Install!"
+        "reload_addons_button":"Reload Addons",
+        "reload_addons_alert":"Do you have complete confidence to do this?",
+        "reload_addons_message":"Successfully done, the page will be reloaded soon",
+        "create_button":"Create",
+        "name_list":"Name",
+        "actions_list":"Actions",
+        "open_button":"Open",
+        "delete_button":"Delete",
+        "go_back_button":"Go Back",
+        "save_file_button":"Save File",
+        "fm_error_1":"This path does not exist",
+        "fm_error_2":"This Folder is Empty",
+        "fm_error_3":"There was a problem reading the file",
+        "fm_error_4":"This file is unknown and the fable is not open",
+        "fm_error_5":"This path does not exist",
+        "fm_error_6":"An error occurred while saving the file",
+        "fm_error_7":"File saved successfully!",
+        "fm_error_8":"The file does not exist or has been deleted",
+        "fm_error_9":"There is a file with this name",
+        "fm_error_10":"We encountered an unknown error",
+        "fm_error_11":"File created successfully!",
+        "fm_error_12":"The file name Undefined",
+        "fm_error_13":"Unknown error",
+        "fm_error_14":"Successfully completed"
     },
     "profile_page":{
+        "events":"Events",
         "prfile":"Profile",
         "username":"Username",
         "password":"Password",
@@ -143,12 +195,14 @@
         "new_password":"New Password",
         "change_password_button":"Change Password",
         "success_alert":"Password Changed Successfully!",
-        "danger_alert":"The Last Password Entered Is Incorrect."
+        "danger_alert":"The Last Password Entered Is Incorrect.",
+        "danger_alert_2":"Unknown Error"
     },
     "access_page":{
         "access":"Access",
         "alert_success_add":"Successfully!",
         "alert_danger_add":"The Username Exist!",
+        "alert_danger_add_2":"Unknown Error",
         "add_access":"Add Access",
         "add_username":"Username",
         "add_password":"Password",
@@ -158,9 +212,11 @@
         "level_permission_table":"Level Permission",
         "alert_success_remove":"Successfully!",
         "alert_danger_remove":"The Username Does Not Exist!",
+        "alert_danger_remove_2":"Unknown Error",
         "remove_access":"Remove Access",
         "remove_access_sub":"Remove Access",
         "remove_access_username":"Username",
-        "remove_access_button":"Remove Access"
+        "remove_access_button":"Remove Access",
+        "remove_access_alert_confirm":"Are you sure you want to perform this operation?"
     }
 }
