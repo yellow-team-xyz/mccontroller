@@ -47,7 +47,7 @@ function get(html_id,callback) {
             </div>
         </div>
     </main>
-    <main id="app_body" style="display: none;">
+    <main class="center" id="app_body" style="display: none;">
         <center>
             <h1 style="color: white;">${language['403_page'].error_title}</h1>
             <h5 style="color: white;">${language['403_page'].error_sub_title}</h5>
@@ -104,7 +104,7 @@ function get(html_id,callback) {
             </div>
         </div>
     </main>
-    <main id="app_body" style="display: none;">
+    <main class="center" id="app_body" style="display: none;">
         <center>
             <h1 style="color: white;">${language['404_page'].error_title}</h1>
             <h5 style="color: white;">${language['404_page'].error_sub_title}</h5>
@@ -166,6 +166,14 @@ function get(html_id,callback) {
     <script>setTimeout(() => {window.location.reload();}, 3100);</script>
 </body>
 </html>`;
+    }
+    if(html_id=='104'){
+        data = `<main id="app_disconnect" class="center" style="display: none;">
+    <center>
+        <h1 style="color: white;">${language.socket_disconnect_page.socket_disconnect}</h1>
+        <button style="margin-top: 15px;" class="btn btn-primary" onclick="window.location.reload();">${language.socket_disconnect_page.reload_for_reconnect_button}</button>
+    </center>
+</main>`;
     }
     callback(data);
 }
