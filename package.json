@@ -19,9 +19,6 @@
   "version": "1.80.0",
   "description": "Free Web Minecraft Hosting!",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "test": "node ."
   },
