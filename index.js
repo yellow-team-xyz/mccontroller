@@ -4124,7 +4124,7 @@ function update_this_data(datajson, callback) {
   server_conf_resource_pack_url = datajson.server_conf_resource_pack_url;
   if (setup == 1) {
     if (app_language != undefined && app_language != '') {
-      language = require('./languages/${app_language}.json');
+      language = require(`./languages/${app_language}.json`);
       static_htmls_get('101', function (callback_data) {
         html_error_403 = callback_data;
         static_htmls_get('102', function (callback_data) {
