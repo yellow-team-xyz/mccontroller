@@ -1,0 +1,207 @@
+{
+    "mccontroller_name":"ام سی کنترلر",
+    "copyright":{
+        "title":"قدرت گرفته از تیم زد",
+        "color":"#ffbf00"
+    },
+    "404_page":{
+        "error_title":"پیدا نشد",
+        "error_sub_title":"خطای 404 : چنین صفحه ای وجود ندارد",
+        "error_home_page_button":"صفحه خانه"
+    },
+    "403_page":{
+        "error_title":"دسترسی ممنوع",
+        "error_sub_title":"خطای 403: ای پی شما مسدود شده است<br/>اگر رمز عبور یا نام کاربری را اشتباه وارد کنید، پس از 10 ثانیه اجازه ورود خواهید داشت",
+        "error_reload_page_button":"تلاش مجدد"
+    },
+    "socket_disconnect_page":{
+        "socket_disconnect":"ارتباط سوکت قطع شد",
+        "reload_for_reconnect_button":"تلاش مجدد برای ارتباط مجدد"
+    },
+    "error_message":{
+        "101":"نام کاربری یا رمز عبور اشتباه است",
+        "103":"خروج انجام شد"
+    },
+    "login_page":{
+        "login_title":"ورود",
+        "login_input_username":"نام کاربری",
+        "login_input_password":"کلمه عبور",
+        "remember_checkbox_password":"رمز عبور را به خاطر بسپار",
+        "login_button":"ورود"
+    },
+    "nav_side":{
+        "server":"سرور",
+        "options":"گزینه ها",
+        "console":"کنسول",
+        "log":"گزارش",
+        "plugins":"پلاگین ها",
+        "general_settings":"تنظیمات عمومی",
+        "addons":"افزونه ها",
+        "profile":"حساب کاربری",
+        "access":"دسترسی",
+        "logout":"خروج"
+    },
+    "access_level_permission":{
+        "server":"سرور",
+        "options":"گزینه ها",
+        "console":"کنسول",
+        "log":"گزارش",
+        "plugins":"پلاگین ها",
+        "general_settings":"تنظیمات عمومی",
+        "addons":"افزونه ها",
+        "profile":"حساب کاربری",
+        "administrator":"ادمین"
+    },
+    "filemanager":{
+        "create_button":"ساخت",
+        "name_list":"اسم",
+        "actions_list":"عملیات",
+        "delete_button":"حذف",
+        "go_back_button":"برگشت به عقب",
+        "save_file_button":"ذخیره فایل",
+        "fm_error_1":"این مسیر وجود ندارد",
+        "fm_error_2":"این پوشه خالی است",
+        "fm_error_3":"ما یک مشکلی در خواندن فایل داریم",
+        "fm_error_4":"این فایل قابل باز شدن نمی باشد",
+        "fm_error_5":"این مسیر وجود ندارد",
+        "fm_error_6":"یک خطا در زمان ذخیره کردن فایل رخ داد",
+        "fm_error_7":"فایل با موفقیت ذخیره شد",
+        "fm_error_8":"این فایل وجود ندارد یا اینکه حذف شده است",
+        "fm_error_9":"اینجا یک فایل بااین نام وجود دارد",
+        "fm_error_10":"ما به یک خطای ناشناخته برخوردیم",
+        "fm_error_11":"فایل با موفقیت ساخته شد",
+        "fm_error_12":"این اسم مجاز نمی باشد",
+        "fm_error_13":"خطای ناشناخته",
+        "fm_error_14":"با موفقیت انجام شد"
+    },
+    "dashboard":"داشبورد",
+    "server_page":{
+        "server":"سرور",
+        "offline":"خاموش",
+        "starting":"درحال روشن شدن",
+        "online":"روشن",
+        "start_button":"روشن کردن سرور",
+        "stop_button":"خاموش کردن سرور",
+        "system_usage":"اطلاعات مصرفی سرور",
+        "server_info":"اطلاعات سرور",
+        "system_ram_use":"مقدار مصرف رم سرور",
+        "system_cpu_use":"مقدار مصرف سی پی یو سرور",
+        "online_player":"بازیکن های انلاین",
+        "waiting_process":"این عملیات کمی طول میکشد لطفا صبر کنید"
+    },
+    "options_page":{
+        "server_properties":"خواص.سرور",
+        "spawn_protection":"حفاظت از منطقه شروع",
+        "slots":"ظرفیت سرور",
+        "gamemode":"حالت بازی",
+        "gamemode_survival":"بقا",
+        "gamemode_creative":"خلاق",
+        "gamemode_adventure":"ماجرا",
+        "gamemode_spectator":"تماشاگر",
+        "difficulty":"دشواری",
+        "difficulty_easy":"اسان",
+        "difficulty_peaceful":"صلح امیز",
+        "difficulty_normal":"طبیعی",
+        "difficulty_hard":"سخت",
+        "whitelist":"لیست سفید",
+        "cracked":"ورود کرکی ها",
+        "pvp":"مبارزه",
+        "commandblocks":"بلوک های فرمان",
+        "fly":"پرواز",
+        "animals":"حیوانات",
+        "monster":"هیولا",
+        "villagers":"روستاییان",
+        "nether":"جهنم",
+        "force_gamemode":"اجباری حالت بازی",
+        "resource_pack_url":"ادرس ریسورس پک",
+        "update_options_button":"بروزرسانی تنظیمات",
+        "alert_success":"با موفقیت!",
+        "alert_danger":"خطا!"
+    },
+    "console_page":{
+        "console":"کنسول",
+        "offline_console":"خاموش",
+        "console_version_message":"> نسخه کنسول => 1.5.5",
+        "console_permission_didnt":"شما اجازه استفاده از این دستور را اینجا ندارید ❌"
+    },
+    "log_page":{
+        "log":"گزارش ",
+        "logs":"گزارش ها",
+        "log_preview_message":"برای پیش نمایش گزارش لطفا یک گزارش را انتخاب کنید",
+        "refresh_list_button":"دریافت دوباره گزارش ها",
+        "name_list":"اسم",
+        "actions_list":"عملیات",
+        "download_button":"دانلود",
+        "delete_button":"حذف",
+        "select_button":"انتخاب",
+        "delete_confirm_message":"برای انجام این عملیات اطمینان کامل دارید این عملیات غیر قابل برگشت است",
+        "delete_success_message":"با موفقیت انجام شد",
+        "delete_error_message":"خطای ناشناخته"
+    },
+    "plugins_page":{
+        "plugins":"پلاگین ها",
+        "upload_plugin":"اپلود پلاگین",
+        "upload_plugin_button":"شروع اپلود پلاگین",
+        "file_is_uploading":"درحال اپلود شدن",
+        "file_upload_done":"فایل با موفقیت آپلود شد",
+        "file_upload_error":"خطا در آپلود فایل"
+    },
+    "general_settings_page":{
+        "setup":"تنظیمات برپایی",
+        "error_101":"تنظیمات با موفقیت تغییر کرد",
+        "error_102":"درخواست ها کامل نیست",
+        "error_103":"مقدار سرور پورت مجاز نیست",
+        "server_port":"سرور پورت",
+        "min_ram_use":"حداقل استفاده از رام (گیگابایت)",
+        "max_ram_use":"حداکثر استفاده از رام (گیگابایت)",
+        "server_name":"نام سرور",
+        "minecraft_server_software":"نرم افزار سرور ماینکرافت",
+        "minecraft_server_version":"نسخه سرور ماینکرافت",
+        "languages":"زبان ها",
+        "connection_type":"نوع ارتباط",
+        "connection_type_public":"عمومی | همه ی ای پی ها قادر به اتصال هستند",
+        "connection_type_private":"خصوصی | فقط ای پی محلی قادر به اتصال است",
+        "update_setup_button":"بروزرسانی تنظیمات"
+    },
+    "addons_page":{
+        "addons":"افزونه ها",
+        "reload_addons_button":"دوباره روشن کردن افزونه ها",
+        "reload_addons_alert":"برای انجام این عملیات اطمینان کافی را دارید؟",
+        "reload_addons_message":"با موفقیت انجام شد بزودی صفحه تغیر خواهد کرد"
+        
+    },
+    "profile_page":{
+        "events":"عملیات ها",
+        "prfile":"حساب کاربری",
+        "username":"Username",
+        "password":"Password",
+        "change_password":"تغییر رمز عبور",
+        "last_password":"اخرین رمز عبور",
+        "new_password":"رمز عبور جدید",
+        "change_password_button":"تغییر رمز عبور",
+        "success_alert":"رمز عبور با موفقیت تغییر کرد",
+        "danger_alert":"آخرین کلمه عبور وارد شده اشتباه است",
+        "danger_alert_2":"خطای ناشناخته"
+    },
+    "access_page":{
+        "access":"دسترسی",
+        "alert_success_add":"با موفقیت!",
+        "alert_danger_add":"نام کاربری وجود دارد!",
+        "alert_danger_add_2":"خطای ناشناخته",
+        "add_access":"دسترسی را اضافه کنید",
+        "add_username":"نام کاربری",
+        "add_password":"رمزعبور",
+        "access_level_permission":"Access Level Permission",
+        "add_access_button":"دسترسی را اضافه کنید",
+        "username_table":"نام کاربری",
+        "level_permission_table":"سطح دسترسی",
+        "alert_success_remove":"با موفقیت!",
+        "alert_danger_remove":"نام کاربری وجود ندارد!",
+        "alert_danger_remove_2":"خطای ناشناخته",
+        "remove_access":"دسترسی را حذف کنید",
+        "remove_access_sub":"دسترسی را حذف کنید",
+        "remove_access_username":"نام کاربری",
+        "remove_access_button":"دسترسی را حذف کنید",
+        "remove_access_alert_confirm":"شما اطمینان کافی را برای انجام این عملیات دارید؟"
+    }
+}

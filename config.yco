@@ -1,0 +1,6 @@
+{
+    "webserver_ip":"localhost",
+    "webserver_port":"3000",
+    "multipleips":"false",
+    "server_ip":"localhost"
+}
